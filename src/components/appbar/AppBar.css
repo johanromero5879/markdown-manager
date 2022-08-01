@@ -1,0 +1,16 @@
+header.navbar {
+    display: flex;
+}
+
+.navbar .logo {
+    width: 65px;
+    height: 60px;
+}
+
+.navbar .right-tools {
+    margin-left: auto;
+}
+
+.menu-drawer h3 {
+    padding: 0.5rem 1.5rem;
+}
