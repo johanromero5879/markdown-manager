@@ -1,5 +1,6 @@
 header.navbar {
     display: flex;
+    position: relative;
 }
 
 .navbar .logo {

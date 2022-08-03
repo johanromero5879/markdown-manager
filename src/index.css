@@ -13,3 +13,20 @@
 body {
   font-family: 'Roboto', sans-serif;
 }
+
+.modal {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.modal .form {
+  background-color: whitesmoke;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  width: 500px;
+}

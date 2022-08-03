@@ -1,4 +1,8 @@
 import { 
+    Link,
+    useLocation
+} from 'react-router-dom'
+import { 
     AppBar as Bar,
     Button,
     Toolbar,
@@ -12,9 +16,10 @@ import Logo from './markdown.jpg'
 import './AppBar.css'
 
 const AppBar = () => {
+    const location = useLocation()
     const matchMobile = useMediaQuery('(max-width: 767px)')
     const matchXS = useMediaQuery('(max-width: 364px)')
-    const logged = true
+    const logged = false
 
     return <>
         <Bar className="navbar">
@@ -41,7 +46,14 @@ const AppBar = () => {
                         }
                         {
                             !logged && 
-                            <Button color="inherit" startIcon={<LoginIcon />}>
+                            <Button 
+                                component={Link}
+                                to="/login"
+                                state={{ background: location }}
+                                color="inherit" 
+                                startIcon={!matchXS && <LoginIcon />}
+                                endIcon={matchXS && <LoginIcon />}
+                            >
                                 { !matchXS && 'Login' }
                             </Button>
                         }
