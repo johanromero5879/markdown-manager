@@ -1,4 +1,3 @@
-import { FormEvent, ChangeEvent, useState } from 'react'
 import { 
     Modal,
     TextField,
@@ -13,6 +12,15 @@ import {
 } from 'react-router-dom'
 
 import PasswordField from '../passwordfield/PasswordField'
+import useForm from '../../hooks/useForm'
+import { validator } from '../../models/user/UserValidator'
+
+interface NewUser {
+    fullname: string,
+    username: string,
+    password: string,
+    confirmPassword: string
+}
 
 const SignupForm = () => {
     // Location url
@@ -20,30 +28,37 @@ const SignupForm = () => {
     const state = location.state as { background?: Location }
 
     const navigate = useNavigate()
-    const [open] = useState(true)
-    const [newUser, setNewUser] = useState({
+    
+    const initialState = {
         fullname:'',
         username: '',
         password: '',
-        confirm_password: ''
+        confirmPassword: ''
+    }
+
+    const submit= () => {
+        console.log('Submited')
+    }
+
+    const {
+        state: newUser,
+        errors,
+        handleChange, 
+        handleBlur,
+        handleSubmit
+    } = useForm<NewUser>({
+        initialState,
+        validator,
+        submit
     })
 
     const handleClose = () => {
         navigate('/')
     }
 
-    const handleSubmit= (e: FormEvent<HTMLFormElement>) => {
-        console.log('submitted')
-        e.preventDefault()
-    }
-
-    const handleChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
-        setNewUser({...newUser, [target.name]: target.value})
-    }
-
     return (
         <Modal
-            open={open}
+            open={true}
             onClose={handleClose}
             className="modal"
         >
@@ -61,6 +76,9 @@ const SignupForm = () => {
                     variant="outlined" 
                     value={newUser.fullname}
                     onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={!!errors.fullname}
+                    helperText={errors.fullname}
                 />
                 <TextField 
                     id="username"
@@ -69,12 +87,27 @@ const SignupForm = () => {
                     variant="outlined" 
                     value={newUser.username}
                     onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={!!errors.username}
+                    helperText={errors.username}
                 />
                 <PasswordField 
                     value={newUser.password}
                     label='Password'
                     name='password'
-                    handleChange={handleChange}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={!!errors.password}
+                    helperText={errors.password}
+                />
+                <PasswordField 
+                    value={newUser.confirmPassword}
+                    label='Confirm password'
+                    name='confirmPassword'
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={!!errors.confirmPassword}
+                    helperText={errors.confirmPassword}
                 />
                 <Button
                     variant="contained"

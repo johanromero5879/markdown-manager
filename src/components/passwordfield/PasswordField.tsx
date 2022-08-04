@@ -1,9 +1,10 @@
-import { useState, ChangeEvent } from 'react'
+import { useState, ChangeEvent, FocusEvent } from 'react'
 import {
     IconButton,
     InputAdornment,
     InputLabel,
     FormControl,
+    FormHelperText,
     OutlinedInput
 } from '@mui/material'
 
@@ -11,13 +12,16 @@ import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 
 interface PasswordFieldProps {
-    label: string,
-    value: string,
-    name: string,
-    handleChange: (e: ChangeEvent<HTMLInputElement>) => void
+    error? : boolean,
+    helperText?: string,
+    label?: string,
+    value?: string,
+    name?: string,
+    onChange?: (e: ChangeEvent<HTMLInputElement>) => void,
+    onBlur?: (e: FocusEvent<HTMLInputElement>) => void
 }
 
-const PasswordField = ({ label, value, name, handleChange }: PasswordFieldProps) => {
+const PasswordField = ({ label, value, name, onChange, onBlur, error, helperText }: PasswordFieldProps) => {
     const [show, setShow] = useState(false)
 
     const toggleShow = () => {
@@ -26,14 +30,16 @@ const PasswordField = ({ label, value, name, handleChange }: PasswordFieldProps)
 
     return (
         <FormControl variant="outlined" >
-            <InputLabel htmlFor={name}>{ label }</InputLabel>
+            <InputLabel htmlFor={name} error={error}>{ label }</InputLabel>
             <OutlinedInput 
                 id={name}
                 name={name}
                 label={label}
                 type={ show ? 'text': 'password' }
                 value={value}
-                onChange={handleChange}
+                onChange={onChange}
+                onBlur={onBlur}
+                error={error}
                 endAdornment={
                     <InputAdornment position="end">
                         <IconButton
@@ -45,6 +51,7 @@ const PasswordField = ({ label, value, name, handleChange }: PasswordFieldProps)
                     </InputAdornment>
                 }
             />
+            { helperText && <FormHelperText error={error}>{ helperText }</FormHelperText> }
         </FormControl>
     )
 }

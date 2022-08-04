@@ -1,4 +1,3 @@
-import { FormEvent, ChangeEvent, useState } from 'react'
 import { 
     Modal,
     TextField,
@@ -13,35 +12,49 @@ import {
 } from 'react-router-dom'
 
 import PasswordField from '../passwordfield/PasswordField'
+import useForm from '../../hooks/useForm'
+import { validator } from '../../models/user/UserValidator'
+
+interface Credentials {
+    username: string,
+    password: string
+}
 
 const LoginForm = () => {
     // Location url
     const location = useLocation()
     const state = location.state as { background?: Location }
-
     const navigate = useNavigate()
-    const [open] = useState(true)
-    const [credentials, setCredentials] = useState({
+
+    const initialState = {
         username: '',
         password: ''
+    }
+
+    const submit= () => {
+        console.log('Submited')
+    }
+
+    const { 
+        state: credentials,
+        errors, 
+        handleChange,
+        handleBlur,
+        handleSubmit 
+    } = useForm<Credentials>({
+        initialState,
+        validator,
+        submit
     })
 
+    
     const handleClose = () => {
         navigate('/')
     }
 
-    const handleSubmit= (e: FormEvent<HTMLFormElement>) => {
-        console.log('submitted')
-        e.preventDefault()
-    }
-
-    const handleChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
-        setCredentials({...credentials, [target.name]: target.value})
-    }
-
     return (
         <Modal
-            open={open}
+            open={true}
             onClose={handleClose}
             className="modal"
         >
@@ -59,12 +72,18 @@ const LoginForm = () => {
                     variant="outlined" 
                     value={credentials.username}
                     onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={!!errors.username}
+                    helperText={errors.username}
                 />
                 <PasswordField 
                     value={credentials.password}
                     label='Password'
                     name='password'
-                    handleChange={handleChange}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    error={!!errors.password}
+                    helperText={errors.password}
                 />
                 <Button
                     variant="contained"
