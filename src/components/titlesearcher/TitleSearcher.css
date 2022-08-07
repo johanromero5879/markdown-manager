@@ -1,0 +1,48 @@
+.side-searcher {
+    background-color: ghostwhite;
+    width: 300px;
+}
+
+.side-searcher input {
+    padding-right: 1rem;
+    padding-bottom: 0.5rem;
+}
+
+.input-searcher {
+    animation: slideIn 0.3s;
+    background-color: rgba(22, 28, 36, 0.1);
+    backdrop-filter: blur(6px);
+    display: flex;
+    height: 64px;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+.input-searcher .search-icon, 
+.input-searcher input {
+    color: #fff;
+}
+
+@keyframes slideIn {
+    0% {
+        top: -70px;
+    }
+
+    100% {
+        top: 0;
+    }
+}
+
+@media screen and (max-width: 364px) {
+    .input-searcher {
+        height: 56px;
+    }   
+}
+
+@media screen and (max-width: 599px) {
+    .input-searcher {
+        height: 60px;
+    }   
+}

@@ -1,7 +1,10 @@
 import { 
-    Modal,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogContentText,
+    DialogActions,
     TextField,
-    Typography,
     Button,
     Link
 } from '@mui/material'
@@ -57,76 +60,77 @@ const SignupForm = () => {
     }
 
     return (
-        <Modal
+        <Dialog
             open={true}
             onClose={handleClose}
-            className="modal"
+            className="dialog"
         >
-            <form 
-                className="form" 
-                onSubmit={handleSubmit}
-            >
-                <Typography variant="h6" component="h2">
-                    Sign Up
-                </Typography>
-                <TextField 
-                    id="fullname"
-                    name="fullname"
-                    label="Full name" 
-                    variant="outlined" 
-                    value={newUser.fullname}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={!!errors.fullname}
-                    helperText={errors.fullname}
-                />
-                <TextField 
-                    id="username"
-                    name="username"
-                    label="Username" 
-                    variant="outlined" 
-                    value={newUser.username}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={!!errors.username}
-                    helperText={errors.username}
-                />
-                <PasswordField 
-                    value={newUser.password}
-                    label='Password'
-                    name='password'
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={!!errors.password}
-                    helperText={errors.password}
-                />
-                <PasswordField 
-                    value={newUser.confirmPassword}
-                    label='Confirm password'
-                    name='confirmPassword'
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    error={!!errors.confirmPassword}
-                    helperText={errors.confirmPassword}
-                />
+            <DialogTitle>Sign Up</DialogTitle>
+            <DialogContent>
+                <form id="signup-form" onSubmit={handleSubmit}>
+                    <TextField 
+                        id="fullname"
+                        name="fullname"
+                        label="Full name" 
+                        variant="outlined" 
+                        value={newUser.fullname}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={!!errors.fullname}
+                        helperText={errors.fullname}
+                    />
+                    <TextField 
+                        id="username"
+                        name="username"
+                        label="Username" 
+                        variant="outlined" 
+                        value={newUser.username}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={!!errors.username}
+                        helperText={errors.username}
+                    />
+                    <PasswordField 
+                        value={newUser.password}
+                        label='Password'
+                        name='password'
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={!!errors.password}
+                        helperText={errors.password}
+                    />
+                    <PasswordField 
+                        value={newUser.confirmPassword}
+                        label='Confirm password'
+                        name='confirmPassword'
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={!!errors.confirmPassword}
+                        helperText={errors.confirmPassword}
+                    />
+                    <DialogContentText>
+                        Do you already have an account?&nbsp;
+                        <Link 
+                            className="nowrap"
+                            component={LinkRouter} 
+                            to="/login"
+                            state={{ background: state?.background }}
+                        >
+                            Log in
+                        </Link>
+                    </DialogContentText>
+                </form>
+            </DialogContent>
+            <DialogActions>
                 <Button
                     variant="contained"
                     type="submit"
+                    form="signup-form"
                 >
                     Submit
                 </Button>
-                <p>
-                    Do you already have an account?&nbsp;
-                    <Link 
-                        component={LinkRouter} 
-                        to="/login"
-                        state={{ background: state?.background }}
-                    >
-                        Log in
-                    </Link>
-                </p>
-            </form>
-        </Modal>
+            </DialogActions>
+        </Dialog>
     )
 }
 

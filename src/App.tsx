@@ -1,22 +1,15 @@
 import { 
   Route, 
   Routes,
-  Outlet, 
   useLocation 
 } from 'react-router-dom'
 
-import AppBar from './components/appbar/AppBar';
+import Layout from './components/layout/Layout'
 import Home from './components/home/Home';
 import LoginForm from './components/loginform/LoginForm';
-import './App.css';
 import SignupForm from './components/signupform/SignupForm';
 
-const Layout = () => {
-  return <>
-    <AppBar />
-    <Outlet />
-  </>
-}
+import './App.css';
 
 const App = () => {  
   const location = useLocation()

@@ -11,51 +11,55 @@ import {
 } from '@mui/material'
 import LoginIcon from '@mui/icons-material/Login'
 
-import {AppMenu, MenuDrawer} from './AppMenu'
+import AppMenu from './AppMenu'
 import Logo from './markdown.jpg'
 import './AppBar.css'
+import { InputSearcher } from '../titlesearcher/TitleSearcher'
 
 const AppBar = () => {
     const location = useLocation()
-    const matchMobile = useMediaQuery('(max-width: 767px)')
-    const matchXS = useMediaQuery('(max-width: 364px)')
+
+    const matchDesktop = useMediaQuery('(min-width: 1024px)')
+
     const logged = false
+    const user = {
+        fullname: 'Johan Romero',
+        username: 'johan.romero5879',
+        role: 'Administrator'
+    }
 
     return <>
-        <Bar className="navbar">
+        <Bar className="navbar" position="sticky">
             <Toolbar>
+                <img src={Logo} alt="app icon" className="logo" />
                 {
-                    (logged && matchMobile) && 
-                    <MenuDrawer fullname='Johan Sebastian' />
+                    matchDesktop 
+                    ?
+                        <Typography 
+                            variant="h6"
+                            component="h1"
+                        >
+                            Markdown Manager
+                        </Typography>
+                    :
+                        <InputSearcher />
                 }
-                {
-                    !matchXS && 
-                    <img src={Logo} alt="app icon" className="logo" />
-                }
-                <Typography 
-                    variant={!matchXS ? "h6" : "subtitle1"} 
-                    component="h1"
-                >
-                    Markdown Manager
-                </Typography>
                 {
                     <div className="right-tools">
                         {
-                            (logged && !matchMobile) &&
-                            <AppMenu fullname='Johan Sebastian' />
-                        }
-                        {
-                            !logged && 
-                            <Button 
-                                component={Link}
-                                to="/login"
-                                state={{ background: location }}
-                                color="inherit" 
-                                startIcon={!matchXS && <LoginIcon />}
-                                endIcon={matchXS && <LoginIcon />}
-                            >
-                                { !matchXS && 'Login' }
-                            </Button>
+                            logged 
+                            ? 
+                                <AppMenu user={ user } />
+                            :
+                                <Button 
+                                    component={Link}
+                                    to="/login"
+                                    state={{ background: location }}
+                                    color="inherit" 
+                                    startIcon={<LoginIcon />}
+                                >
+                                    Login
+                                </Button>
                         }
                     </div>
                 }

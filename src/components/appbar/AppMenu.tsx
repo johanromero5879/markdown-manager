@@ -1,23 +1,25 @@
 import { useState, MouseEvent } from 'react'
 import { 
-    Button,
+    Avatar,
     Divider,
-    SwipeableDrawer,
-    IconButton,
     Menu,
     MenuItem,
-    MenuList,
     ListItemIcon,
     ListItemText,
-    Typography
+    Typography,
+    useMediaQuery
 } from '@mui/material'
-import MenuIcon from '@mui/icons-material/Menu'
+import { lightBlue } from '@mui/material/colors'
 import LogoutIcon from '@mui/icons-material/Logout'
 import AccountIcon from '@mui/icons-material/AccountCircle'
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
+import PersonIcon from '@mui/icons-material/Person'
 
 interface AppMenuProps {
-    fullname: string
+    user: {
+        fullname: string,
+        username: string,
+        role: string
+    }
 }
 
 const menuOptions = [
@@ -33,63 +35,10 @@ const menuOptions = [
     }
 ]
 
-export const MenuDrawer = ({ fullname }: AppMenuProps) => {
-    const [open, setOpen] = useState(false)
+const AppMenu = ({ user }: AppMenuProps) => {
 
-    const toggle = () => {
-        setOpen(!open)
-    }
+    const matchXS = useMediaQuery('(max-width: 364px)')
 
-    const drawer = (
-        <aside className="menu-drawer">
-            <Typography 
-                variant="subtitle1" 
-                component="h3"
-            >
-                { fullname }
-            </Typography>
-            <Divider />
-            <MenuList>
-                {
-                    menuOptions.map(({ description, icon }, index) => 
-                        <MenuItem 
-                            key={index}
-                            className="menu-item"
-                        >
-                            <ListItemIcon>
-                                { icon }
-                            </ListItemIcon>
-                            <ListItemText>
-                                { description }
-                            </ListItemText>
-                        </MenuItem>
-                    )
-                }
-            </MenuList>
-        </aside>
-    )
-
-    return <>
-        <IconButton 
-            color="inherit" 
-            onClick={toggle}
-        >
-            <MenuIcon />
-        </IconButton>
-        <SwipeableDrawer
-            anchor="left"
-            variant="temporary"
-            open={open}
-            onClose={toggle}
-            onOpen={toggle}
-            className="menu-drawer"
-        >
-            { drawer }
-        </SwipeableDrawer>
-    </>
-}
-
-export const AppMenu = ({ fullname }: AppMenuProps) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const open = Boolean(anchorEl)
 
@@ -100,16 +49,32 @@ export const AppMenu = ({ fullname }: AppMenuProps) => {
     const handleClose = () => {
         setAnchorEl(null)
     }
+
+    const getInitialsName = (fullname: string) => {
+        let initialLetters = ''
+
+        if(!!fullname.trim()) {
+            const nameSplitted = fullname.split(' ')
+            initialLetters = nameSplitted[0][0] + (nameSplitted.length > 1 ? nameSplitted[1][0] : '')
+        }
+
+        return initialLetters
+    }
     
     return <>
-        <Button 
-            color="inherit"
-            endIcon={<ArrowDropDownIcon />}
+        <Avatar
+            className='avatar-button'
+            sx={{ 
+                bgcolor: lightBlue[600],  
+                width: matchXS ? 32 : 40, 
+                height: matchXS ? 32 : 40
+            }}
             onClick={handleClick}
         >
-            { fullname }
-        </Button>
+            { getInitialsName(user.fullname) || <PersonIcon /> }
+        </Avatar>
         <Menu 
+            className='menu-dropdown'
             anchorEl={anchorEl}
             open={open}
             onClose={handleClose}
@@ -119,13 +84,35 @@ export const AppMenu = ({ fullname }: AppMenuProps) => {
             }}
             PaperProps={{
                 style: {
-                    minWidth: '125px'
+                    minWidth: '150px'
                 }
             }}
         >
-            {
-                menuOptions.map(({ description }, index) => <MenuItem key={index}>{ description }</MenuItem>)
-            }
+            <div className="header">
+                <Typography variant="subtitle1">
+                    { user.fullname }
+                </Typography>
+                <Typography variant="caption">
+                    { user.role }
+                </Typography>
+            </div>
+            <Divider />
+            <div className="list">
+                {
+                    menuOptions.map(({ description, icon }, index) => 
+                        <MenuItem key={index}>
+                            <ListItemIcon>
+                                { icon }
+                            </ListItemIcon>
+                            <ListItemText>
+                                { description }
+                            </ListItemText>
+                        </MenuItem>
+                    )
+                }
+            </div>
         </Menu>
     </>
 }
+
+export default AppMenu
