@@ -6,6 +6,7 @@ main {
 
 main .content {
     flex-grow: 1;
+    padding: 1rem;
 }
 
 button.fab {

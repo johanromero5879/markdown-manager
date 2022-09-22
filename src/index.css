@@ -15,17 +15,16 @@ body {
   min-height: 100vh;
 }
 
-.nowrap {
-  white-space: nowrap;
+pre {
+  white-space: pre-wrap;
 }
 
-.dialog form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  padding-top: 0.5rem;
+.nowrap {
+  white-space: nowrap;
 }
 
 .avatar-button {
   cursor: pointer;
 }
+
+

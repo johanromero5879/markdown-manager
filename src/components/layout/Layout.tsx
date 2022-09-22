@@ -1,7 +1,7 @@
 import {  Outlet } from 'react-router-dom'
 import { useMediaQuery } from '@mui/material'
 import AppBar from '../appbar/AppBar';
-import { SideSearcher } from '../titlesearcher/TitleSearcher'
+import { SideSearcher } from '../title-searcher/TitleSearcher'
 
 const Layout = () => {
     const matchDesktop = useMediaQuery('(min-width: 1024px)')

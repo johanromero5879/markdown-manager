@@ -93,7 +93,7 @@ const validatePassword = (password: string, errors: any) => {
 
 const validateConfirmPassword = (confirm: string, password: string, errors: any) => {
     if(!confirm || confirm !== password) {
-        errors.confirmPassword = "It must coincide with password."
+        errors.confirmPassword = "It must equal than password."
         return false
     }
 

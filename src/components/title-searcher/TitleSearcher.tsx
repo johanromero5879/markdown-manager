@@ -17,17 +17,17 @@ import ListDocumentItem from './ListDocumentItem'
 
 const documents = [
     {
-        _id: 1,
+        _id: '1',
         title: 'Title 1',
         created_by: { fullname: 'John Titor' }
     },
     {
-        _id: 2,
+        _id: '2',
         title: 'Title 2',
         created_by: { fullname: 'Sara Claire' }
     },
     {
-        _id: 3,
+        _id: '3',
         title: 'Titulo largo que te cagas en tus muertos',
         created_by: { fullname: 'Sara Claire' }
     }
@@ -68,7 +68,7 @@ export const InputSearcher = () => {
     const [open, setOpen] = useState(false)
 
     const handleOpen = () => setOpen(true)
-    const handleClose = () => { console.log('Hellooooooou');setOpen(false) }
+    const handleClose = () => setOpen(false)
 
     const handleKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
         console.log(e.target.value)

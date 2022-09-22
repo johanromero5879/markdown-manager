@@ -14,9 +14,11 @@ import {
     useLocation 
 } from 'react-router-dom'
 
-import PasswordField from '../passwordfield/PasswordField'
+import PasswordField from './PasswordField'
 import useForm from '../../hooks/useForm'
 import { validator } from '../../models/user/UserValidator'
+
+import './Forms.css'
 
 interface Credentials {
     username: string,

@@ -14,7 +14,7 @@ import LoginIcon from '@mui/icons-material/Login'
 import AppMenu from './AppMenu'
 import Logo from './markdown.jpg'
 import './AppBar.css'
-import { InputSearcher } from '../titlesearcher/TitleSearcher'
+import { InputSearcher } from '../title-searcher/TitleSearcher'
 
 const AppBar = () => {
     const location = useLocation()

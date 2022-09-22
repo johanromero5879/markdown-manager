@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import {
     ListItem,
     ListItemButton,
@@ -8,6 +9,7 @@ import DocumentIcon from '@mui/icons-material/Description'
 import AddIcon from '@mui/icons-material/Add'
 
 interface DocumentTitle {
+    _id: string,
     title: string,
     created_by: {
         fullname: string
@@ -22,11 +24,14 @@ interface ListTitlesProps {
 const ListDocumentItem = ({ document, dense }: ListTitlesProps) => {
     if(document) {
         return (
-            <ListItem 
+            <ListItem
                 disablePadding
                 dense={dense}
             >
-                <ListItemButton>
+                <ListItemButton 
+                    component={Link}
+                    to={`/document/view/${document._id}`}
+                >
                     <ListItemIcon sx={{minWidth: '35px'}}>
                         <DocumentIcon />
                     </ListItemIcon>
@@ -45,7 +50,10 @@ const ListDocumentItem = ({ document, dense }: ListTitlesProps) => {
             disablePadding 
             dense={dense}
         >
-            <ListItemButton>
+            <ListItemButton
+                component={Link}
+                to={`/document/new`}
+            >
                 <ListItemIcon sx={{minWidth: '35px'}}>
                     <AddIcon />
                 </ListItemIcon>

@@ -13,7 +13,7 @@ interface FormProps<FormState> {
 }
 
 const useForm = <FormState>({ initialState, validator, submit }: FormProps<FormState>) => {
-    const [state, setState] = useState(initialState)
+    const [state, setState] = useState({...initialState})
     const [submited, setSubmited] = useState(false)
     const [errors, setErrors] = useState<FormState>({} as FormState)
 
@@ -51,12 +51,19 @@ const useForm = <FormState>({ initialState, validator, submit }: FormProps<FormS
         setSubmited(true)
     }
 
+    const clearForm = () => {
+        setState({...initialState})
+        setErrors({} as FormState)
+        setSubmited(false)
+    }
+
     return {
         state,
         errors,
         handleChange,
         handleBlur,
-        handleSubmit
+        handleSubmit,
+        clearForm
     }
 }
 
