@@ -8,7 +8,8 @@ import Layout from './components/layout/Layout'
 import Home from './components/home/Home';
 import LoginForm from './components/forms/LoginForm';
 import SignupForm from './components/forms/SignupForm';
-import ViewerDocument from './components/document/ViewerDocument';
+import ViewerDocument from './components/document/DocumentViewer';
+import EditorDocument from './components/document/DocumentEditor';
 
 import './App.css';
 
@@ -21,6 +22,8 @@ const App = () => {
       <Route path='/' element={ <Layout /> }>
         <Route index element={<Home />} />
         <Route path="document">
+          <Route path="new" element={<EditorDocument />} />
+          <Route path="edit/:id" element={<EditorDocument />} />
           <Route path="view/:id" element={<ViewerDocument />} />
         </Route>
         <Route path="login" element={<LoginForm />} />

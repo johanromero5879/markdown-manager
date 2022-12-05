@@ -68,7 +68,9 @@ export const InputSearcher = () => {
     const [open, setOpen] = useState(false)
 
     const handleOpen = () => setOpen(true)
-    const handleClose = () => setOpen(false)
+    const handleClose = () => {
+        setTimeout(() => setOpen(false), 100)
+    }
 
     const handleKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
         console.log(e.target.value)
