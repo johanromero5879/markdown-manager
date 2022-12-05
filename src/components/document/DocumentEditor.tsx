@@ -1,14 +1,9 @@
-// import Markdown from 'react-markdown'
 import { 
-    Card,
-    // Divider,
-    // InputBase,
-    // FormControl
+    Card
 } from '@mui/material'
 
 import useBlocks from '../../hooks/useBlocks'
-import EditableBlock, { RefBlock } from './EditableBlock'
-import { setCaretToEnd } from '../../helpers'
+import EditableBlock, { RefBlock,setCaretToEnd} from './EditableBlock'
 
 const EditorDocument = () => {
     const { blocks, addBlock, deleteBlock, updateBlock } = useBlocks()
@@ -31,6 +26,7 @@ const EditorDocument = () => {
                     <EditableBlock 
                         key={block.id}
                         id={block.id}
+                        text={block.text}
                         addBlock={addBlockHandler}
                         deleteBlock={deleteBlockHandler}
                         updateBlock={updateBlock}

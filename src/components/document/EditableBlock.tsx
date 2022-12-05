@@ -1,9 +1,12 @@
-import { useState, useEffect, createRef, useRef, KeyboardEvent, FocusEvent } from 'react'
-import ContentEditable, { ContentEditableEvent } from 'react-contenteditable'
+import { 
+    useState, 
+    useEffect, 
+    useRef, 
+    KeyboardEvent
+} from 'react'
 import MarkdownIt from 'markdown-it'
 
 import { Block } from '../../hooks/useBlocks'
-import { setCaretToEnd, setCaret } from '../../helpers'
 
 export interface RefBlock {
     id: string,
@@ -16,88 +19,103 @@ interface RefBlockFunc {
 
 interface EditableBlockProps {
     id: string,
+    text: string,
     addBlock: RefBlockFunc,
     deleteBlock: RefBlockFunc,
     updateBlock: (block: Block) => void
 }
 
+export const setCaretToEnd = (element: HTMLElement) => {
+    if (element) {
+        const range = document.createRange()
+        const selection = window.getSelection() as Selection
+        range.selectNodeContents(element)
+        range.collapse(false)
+        selection.removeAllRanges()
+        selection.addRange(range)
+        element.focus()
+    }
+}
+
 const md = new MarkdownIt()
 
-const EditableBlock = ({ id, addBlock, deleteBlock, updateBlock }: EditableBlockProps ) => {
-    const content = createRef<HTMLElement>()
-    const [state, setState] = useState({ id, html: '', text: '', tag: 'div' })
+const EditableBlock = ({ id, text, addBlock, deleteBlock, updateBlock }: EditableBlockProps ) => {
+    const content = useRef<HTMLDivElement | null>(null)
+    const [html, setHTML] = useState(text)
     let previousKey = ''
 
     useEffect(() => {
-        setCaretToEnd(content.current as HTMLElement)
+        setCaretToEnd(content.current!)
         // eslint-disable-next-line
     }, [])
 
     useEffect(() => {
-        updateBlock({ id: state.id, text: state.text })
+        if (document.activeElement === content.current) {
+            content.current!.innerText = text
+            setCaretToEnd(content.current!)
+        }
         // eslint-disable-next-line
-    }, [state])
+    }, [html])
 
-    const render = (text: string) => {
-        text = text.replaceAll('\\\n', '<br>')
-        return md.render(text).replaceAll('&lt;br&gt;', '<br>')
+    const renderHTML = (text: string) => {
+        const rendered = md.render(text.replaceAll('\n', '<br>')).replaceAll('&lt;br&gt;', '<br>').trim()
+        setHTML(rendered)
     }
 
-    const onChangeHandler = (e: ContentEditableEvent) => {
-        const value = e.target.value
-        setState({
-            ...state, 
-            html: value, 
-            text: value.replace('<br>', '\\\n'),
+    const handleChange = () => {
+        const value = (content.current?.innerText+'').trim()
+        updateBlock({ 
+            id, 
+            text: value
         })
     }
 
-    const onKeyDownHandler = (e: KeyboardEvent) => {
-
+    const handleKeyDown = (e: KeyboardEvent) => {
         if (e.key === 'Enter') {
             if (previousKey !== 'Shift') {
                 e.preventDefault()
-                addBlock({id, ref: content.current as HTMLElement})
+                addBlock({id, ref: content.current!})
             }
         }
 
-        if (e.key === 'Backspace' && !state.html) {
+        if (e.key === 'Backspace' && !text) {
             e.preventDefault()
-            deleteBlock({id, ref: content.current as HTMLElement})
+            deleteBlock({id, ref: content.current!})
         }
 
         if (e.key === 'ArrowUp') {
             e.preventDefault()
-            const previousElement = content.current?.previousElementSibling as HTMLElement
+            const previousElement = content.current!.previousElementSibling as HTMLElement
             setCaretToEnd(previousElement)
         }
 
         if (e.key === 'ArrowDown') {
             e.preventDefault()
-            const nextElement = content.current?.nextElementSibling as HTMLElement
+            const nextElement = content.current!.nextElementSibling as HTMLElement
             setCaretToEnd(nextElement)
         }
         
         previousKey = e.key
     }
 
-    const onFocusHandler = (e: FocusEvent) => {
-        setState({...state, html: state.text})
+    const handleFocus = () => {
+        setHTML(text)
     }
 
-    const onBlurHandler = (e: FocusEvent) => {
-        setState({...state, html: render(state.text)})
+    const handleBlur = () => {
+        renderHTML(text)
     }
 
     return (
-        <ContentEditable 
-            innerRef={content}
-            html={state.html}
-            tagName={state.tag}
-            onKeyDown={onKeyDownHandler}
-            onChange={onChangeHandler}
-            onFocus={onFocusHandler}
-            onBlur={onBlurHandler}
+        <div 
+            ref={content}
+            contentEditable
+            suppressContentEditableWarning
+            onInput={handleChange}
+            onKeyDown={handleKeyDown}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            dangerouslySetInnerHTML={{__html: html}}
         />
     )
 }

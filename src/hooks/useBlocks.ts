@@ -1,11 +1,12 @@
 import { useState } from 'react'
 import { flushSync } from 'react-dom'
-import { uid } from '../helpers'
 
 export interface Block {
     id: string,
     text: string
 }
+
+const uid = () => Date.now().toString(36) + Math.random().toString(36).substring(2)
 
 const useBlocks = () => {
     const [blocks, setBlocks] = useState<Block[]>([{id: uid(), text: ''}])
