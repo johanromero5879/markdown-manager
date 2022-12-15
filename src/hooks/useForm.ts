@@ -18,7 +18,7 @@ const useForm = <FormState>({ initialState, validator, submit }: FormProps<FormS
     const [errors, setErrors] = useState<FormState>({} as FormState)
 
     useEffect(() => {
-        const isValidErrors = Object.keys(errors).length > 0
+        const isValidErrors = Object.keys(errors!).length > 0
 
         if(!isValidErrors && submited) {
             submit()

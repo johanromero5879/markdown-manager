@@ -1,14 +1,49 @@
-.markdown-container {
+.markdown {
     display: flex;
     gap: 1rem;
 }
 
-.markdown-card {
+.markdown > .card {
     padding: 1rem;
     flex-basis: 70%;
 }
 
-.markdown-card .form-control {
+.markdown .block {
+    margin: 1rem 0;
+}
+
+/* Markdown styles */
+.markdown .block ol, .markdown .block ul, .markdown .block blockquote {
+    margin-left: 2rem;
+}
+
+.markdown .block img {
+    max-height: 250px;
+}
+
+.markdown .block p:has(img) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.markdown .block blockquote {
+    border-left: 10px solid #63a4ff;
+    padding: 1rem ;
+}
+
+/* End markdown styles */
+
+.markdown [contenteditable="true"]:focus {
+    outline: none;
+}
+
+.markdown .block:empty:focus::before {
+    content: attr(placeholder);
+    opacity: 0.6;
+}
+
+.markdown .card .form-control {
     width: 100%;
 }
 
@@ -24,29 +59,29 @@
     padding-left: 0.2rem;
 }
 
-.markdown-container li.list-item {
+.markdown li.list-item {
     align-items: flex-start;
     gap: 0.5rem;  
     padding-left: 0;
     padding-right: 0;
 }
 
-.markdown-container li.list-item > div {
+.markdown li.list-item > div {
     flex-basis: 50%;
 }
 
 @media screen and (max-width: 830px) {
-    .markdown-container {
+    .markdown {
         flex-direction: column;
     }
 }
 
 @media screen and (max-width: 364px) {
-    .markdown-container li.list-item {
+    .markdown li.list-item {
         flex-direction: column;
     }
 
-    .markdown-container li.list-item > div {
+    .markdown li.list-item > div {
         width: 100%;
     }
 }
