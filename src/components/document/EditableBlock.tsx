@@ -59,13 +59,13 @@ const EditableBlock = ({ id, text, addBlock, deleteBlock, updateBlock }: Editabl
     }, [html])
 
     const renderMarkdown = (text: string) => {
-        const listsRegExp = new RegExp("^([0-9]+\\.|[-\\*\\+]) ", "gm")
+        const listsRegExp = new RegExp("^([0-9]+\\.|[-\\*\\+>]) ", "gm")
 
         if (!listsRegExp.test(text)) { // Check if text doesn't have any list or quote inside
             text = text.replaceAll('\n', '<br>')
         } else {
             // Look for nested list and replace spaces by \t
-            const nestedListsRegExp = new RegExp("^\\s+([0-9]+\\.|[-\\*\\+])", "gm")
+            const nestedListsRegExp = new RegExp("^\\s+([0-9]+\\.|[-\\*\\+>])", "gm")
             text = text.replaceAll(nestedListsRegExp, '\t$1')
         }
 

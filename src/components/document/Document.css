@@ -17,6 +17,16 @@
     margin-left: 2rem;
 }
 
+.markdown .block li {
+    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.markdown .block blockquote * {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
 .markdown .block img {
     max-height: 250px;
 }
