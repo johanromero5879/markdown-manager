@@ -37,6 +37,24 @@
     justify-content: center;
 }
 
+.markdown .block mark {
+    background-color: #90caf9;
+    border-radius: 2px;
+}
+
+.markdown .block pre, .markdown .block code {
+    background-color: #F8F8FF;
+    border-radius: 8px;
+}
+
+.markdown .block pre {
+    padding: 1rem;
+}
+
+.markdown .block code, .markdown .block mark {
+    padding: 0.2rem 0.4rem;
+}
+
 .markdown .block blockquote {
     border-left: 10px solid #63a4ff;
     padding: 1rem ;

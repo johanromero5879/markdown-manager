@@ -4,7 +4,7 @@ import {
     useRef, 
     KeyboardEvent
 } from 'react'
-import MarkdownIt from 'markdown-it'
+import { MarkdownRenderer as markdown } from '../../services/MarkdownRenderer'
 
 import { Block } from '../../hooks/useBlocks'
 
@@ -35,10 +35,6 @@ export const setCaretToEnd = (element: HTMLElement) => {
     element.focus()
 }
 
-const md = new MarkdownIt({
-    typographer: true
-})
-
 const EditableBlock = ({ id, text, addBlock, deleteBlock, updateBlock }: EditableBlockProps ) => {
     const customInput = useRef<HTMLDivElement | null>(null)
     const [html, setHTML] = useState(text)
@@ -57,20 +53,6 @@ const EditableBlock = ({ id, text, addBlock, deleteBlock, updateBlock }: Editabl
         }
         // eslint-disable-next-line
     }, [html])
-
-    const renderMarkdown = (text: string) => {
-        const listsRegExp = new RegExp("^([0-9]+\\.|[-\\*\\+>]) ", "gm")
-
-        if (!listsRegExp.test(text)) { // Check if text doesn't have any list or quote inside
-            text = text.replaceAll('\n', '<br>')
-        } else {
-            // Look for nested list and replace spaces by \t
-            const nestedListsRegExp = new RegExp("^\\s+([0-9]+\\.|[-\\*\\+>])", "gm")
-            text = text.replaceAll(nestedListsRegExp, '\t$1')
-        }
-
-        return md.render(text).replaceAll('&lt;br&gt;', '<br>').trim()
-    }
 
     const handleChange = () => {
         const value = customInput.current!.innerText.trim()
@@ -119,7 +101,7 @@ const EditableBlock = ({ id, text, addBlock, deleteBlock, updateBlock }: Editabl
 
     const handleBlur = () => {
         setFocus(false)
-        setHTML( renderMarkdown(text) )
+        setHTML( markdown.render(text) )
     }
 
     return (
