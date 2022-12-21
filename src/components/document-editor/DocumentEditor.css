@@ -1,0 +1,123 @@
+.markdown {
+    margin-top: 1rem;
+}
+
+.markdown .container {
+    display: flex;
+    align-items: center;
+    margin: 0.75rem 0;
+}
+
+.markdown .container .drag-icon {
+    opacity: 0;
+}
+
+.markdown .container:hover .drag-icon {
+    opacity: 1;
+}
+
+.markdown .container .block {
+    flex: 1;
+}
+
+/* Markdown styles */
+.markdown .block ol, .markdown .block ul, .markdown .block blockquote {
+    margin-left: 2rem;
+}
+
+.markdown .block li {
+    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.markdown .block blockquote * {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.markdown .block img {
+    max-height: 250px;
+}
+
+.markdown .block p:has(img) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.markdown .block mark {
+    background-color: #90caf9;
+    border-radius: 2px;
+}
+
+.markdown .block pre, .markdown .block code {
+    background-color: #F8F8FF;
+    border-radius: 8px;
+}
+
+.markdown .block pre {
+    padding: 1rem;
+}
+
+.markdown .block code, .markdown .block mark {
+    padding: 0.2rem 0.4rem;
+}
+
+.markdown .block blockquote {
+    border-left: 10px solid #63a4ff;
+    padding: 1rem ;
+}
+
+/* End markdown styles */
+
+.markdown [contenteditable="true"]:focus {
+    outline: none;
+}
+
+.markdown .block:empty:focus::before {
+    content: attr(placeholder);
+    opacity: 0.6;
+}
+
+.markdown .card .form-control {
+    width: 100%;
+}
+
+.markdown-info {
+    flex-basis: 30%;
+}
+
+.markdown-info .list-item-header {
+    background-color: #1976d2;
+    border-radius: 2px;
+    color: #fff;
+    margin-bottom: 0.5rem;
+    padding-left: 0.2rem;
+}
+
+.markdown li.list-item {
+    align-items: flex-start;
+    gap: 0.5rem;  
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.markdown li.list-item > div {
+    flex-basis: 50%;
+}
+
+@media screen and (max-width: 830px) {
+    .markdown {
+        flex-direction: column;
+    }
+}
+
+@media screen and (max-width: 364px) {
+    .markdown li.list-item {
+        flex-direction: column;
+    }
+
+    .markdown li.list-item > div {
+        width: 100%;
+    }
+}

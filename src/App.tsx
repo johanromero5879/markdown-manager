@@ -9,7 +9,7 @@ import Home from './components/home/Home';
 import LoginForm from './components/forms/LoginForm';
 import SignupForm from './components/forms/SignupForm';
 import ViewerDocument from './components/document/DocumentViewer';
-import EditorDocument from './components/document/DocumentEditor';
+import EditorDocument from './components/document-editor/DocumentEditor';
 
 import './App.css';
 

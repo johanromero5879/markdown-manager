@@ -10,7 +10,7 @@ md.use(require('markdown-it-sub'))
 md.use(require('markdown-it-sup'))
 md.use(require('markdown-it-mark'))
 
-export const MarkdownRenderer: Renderer = { 
+export const MarkdownRenderService: Renderer = { 
     render(text) {
         const listsRegExp = new RegExp("^([0-9]+\\. |[-\\*\\+>`] |```)", "gm")
 

@@ -12,8 +12,11 @@ interface FormProps<FormState> {
     submit: () => void
 }
 
+type FormStatus = 'IDLE' | 'LOADING' | 'SUCCESS' | 'ERROR'
+
 const useForm = <FormState>({ initialState, validator, submit }: FormProps<FormState>) => {
     const [state, setState] = useState({...initialState})
+    const [formStatus, setFormStatus] = useState<FormStatus>('IDLE')
     const [submited, setSubmited] = useState(false)
     const [errors, setErrors] = useState<FormState>({} as FormState)
 
@@ -21,11 +24,15 @@ const useForm = <FormState>({ initialState, validator, submit }: FormProps<FormS
         const isValidErrors = Object.keys(errors!).length > 0
 
         if(!isValidErrors && submited) {
+            setFormStatus('LOADING')
             submit()
+            setFormStatus('SUCCESS')
         }
 
         setSubmited(false)
-    }, [submited, errors, submit])
+
+        // eslint-disable-next-line
+    }, [submited])
 
     const handleChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
         setState({...state, [target.name]: target.value})
@@ -53,12 +60,14 @@ const useForm = <FormState>({ initialState, validator, submit }: FormProps<FormS
 
     const clearForm = () => {
         setState({...initialState})
+        setFormStatus('IDLE')
         setErrors({} as FormState)
         setSubmited(false)
     }
 
     return {
         state,
+        formStatus,
         errors,
         handleChange,
         handleBlur,

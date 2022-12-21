@@ -1,7 +1,7 @@
 import User from './User'
 
 export const validator = (fieldName: string, values: User) => {
-    let errors = {}
+    const errors = {}
     switch(fieldName) {
         case 'fullname':
             validateFullname(values.fullname, errors)
@@ -93,7 +93,7 @@ const validatePassword = (password: string, errors: any) => {
 
 const validateConfirmPassword = (confirm: string, password: string, errors: any) => {
     if(!confirm || confirm !== password) {
-        errors.confirmPassword = "It must equal than password."
+        errors.confirmPassword = "It must be equal than password."
         return false
     }
 

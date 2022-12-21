@@ -38,7 +38,9 @@ const useBlocks = () => {
         }
     }
 
-    return {blocks, addBlock, deleteBlock, updateBlock}
+    const getText = () => blocks.reduce((previousValue, currentValue) => previousValue + currentValue.text + '\n\n', '').trim()
+
+    return {blocks, addBlock, deleteBlock, updateBlock, getText}
 }
 
 export default useBlocks

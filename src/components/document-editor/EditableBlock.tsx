@@ -7,7 +7,7 @@ import {
 import { IconButton } from '@mui/material'
 import { DragIndicator } from '@mui/icons-material'
 
-import { MarkdownRenderer as markdown } from '../../services/MarkdownRenderer'
+import { MarkdownRenderService as markdown } from '../../services/MarkdownRenderService'
 import { Block } from '../../hooks/useBlocks'
 
 
@@ -28,7 +28,10 @@ interface EditableBlockProps {
     updateBlock: (block: Block) => void
 }
 
-export const setCaretToEnd = (element: HTMLElement) => {
+/**
+ * Set caret to end of a block, then set its focus.
+ */
+export const setBlockFocus = (element: HTMLElement) => {
     const range = document.createRange()
     const selection = window.getSelection() as Selection
     range.selectNodeContents(element)
@@ -38,7 +41,14 @@ export const setCaretToEnd = (element: HTMLElement) => {
     element.focus()
 }
 
+/**
+ * Get previous block by given one
+ */
 export const getPreviousBlock = (element: HTMLElement) => element.parentElement?.previousElementSibling?.lastChild as HTMLElement
+
+/**
+ * Get next block by given one
+ */
 export const getNextBlock = (element: HTMLElement) => element.parentElement?.nextElementSibling?.lastChild as HTMLElement 
 
 const EditableBlock = ({ id, text, addBlock, deleteBlock, updateBlock }: EditableBlockProps ) => {
@@ -49,13 +59,13 @@ const EditableBlock = ({ id, text, addBlock, deleteBlock, updateBlock }: Editabl
     let previousKey = ''
 
     useEffect(() => {
-        setCaretToEnd(customInput.current!)
+        setBlockFocus(customInput.current!)
     }, [])
 
     useEffect(() => {
         if (focus) {
             customInput.current!.innerText = text
-            setCaretToEnd(customInput.current!)
+            setBlockFocus(customInput.current!)
         }
         // eslint-disable-next-line
     }, [html])
@@ -84,7 +94,7 @@ const EditableBlock = ({ id, text, addBlock, deleteBlock, updateBlock }: Editabl
             const previousElement = getPreviousBlock(customInput.current!)
 
             if (previousElement?.matches('.block')) {
-                setCaretToEnd(previousElement)
+                setBlockFocus(previousElement)
             }
         }
 
@@ -93,7 +103,7 @@ const EditableBlock = ({ id, text, addBlock, deleteBlock, updateBlock }: Editabl
             const nextElement = getNextBlock(customInput.current!)
 
             if (nextElement?.matches('.block')) {
-                setCaretToEnd(nextElement)
+                setBlockFocus(nextElement)
             }
         }
         
@@ -111,9 +121,7 @@ const EditableBlock = ({ id, text, addBlock, deleteBlock, updateBlock }: Editabl
     }
 
     return (
-        <div 
-            className='container'
-        >
+        <div className='container'>
             <IconButton 
                 className="drag-icon"
                 size='small'
@@ -133,6 +141,7 @@ const EditableBlock = ({ id, text, addBlock, deleteBlock, updateBlock }: Editabl
                 onBlur={handleBlur}
                 dangerouslySetInnerHTML={{ __html: html }}
             />
+            
         </div>
     )
 }
