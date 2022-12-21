@@ -10,7 +10,9 @@ import {
 import { BorderColor, EditOff } from '@mui/icons-material'
 
 import useBlocks from '../../hooks/useBlocks'
-import EditableBlock, { RefBlock,setCaretToEnd} from './EditableBlock'
+
+import EditableBlock, 
+{ RefBlock, setCaretToEnd, getNextBlock, getPreviousBlock} from './EditableBlock'
 
 const EditorDocument = () => {
     const { blocks, addBlock, deleteBlock, updateBlock } = useBlocks()
@@ -21,8 +23,8 @@ const EditorDocument = () => {
     }
 
     const deleteBlockHandler = (currentBlock: RefBlock) => {
-        const previousElement = currentBlock.ref?.previousElementSibling as HTMLElement
-        const nextElement = currentBlock.ref?.nextElementSibling as HTMLElement
+        const previousElement = getPreviousBlock(currentBlock.ref)
+        const nextElement = getNextBlock(currentBlock.ref)
 
         if (previousElement?.classList.contains('block')) {
             setCaretToEnd(previousElement)
@@ -60,7 +62,7 @@ const EditorDocument = () => {
                         }
                     />
                 </div>
-                <Divider />
+                <Divider /><br />
                 {
                     blocks.map((block) => (
                         <EditableBlock 

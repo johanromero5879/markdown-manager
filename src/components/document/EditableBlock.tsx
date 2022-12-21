@@ -4,9 +4,12 @@ import {
     useRef, 
     KeyboardEvent
 } from 'react'
-import { MarkdownRenderer as markdown } from '../../services/MarkdownRenderer'
+import { IconButton } from '@mui/material'
+import { DragIndicator } from '@mui/icons-material'
 
+import { MarkdownRenderer as markdown } from '../../services/MarkdownRenderer'
 import { Block } from '../../hooks/useBlocks'
+
 
 export interface RefBlock {
     id: string,
@@ -34,6 +37,9 @@ export const setCaretToEnd = (element: HTMLElement) => {
     selection.addRange(range)
     element.focus()
 }
+
+export const getPreviousBlock = (element: HTMLElement) => element.parentElement?.previousElementSibling?.lastChild as HTMLElement
+export const getNextBlock = (element: HTMLElement) => element.parentElement?.nextElementSibling?.lastChild as HTMLElement 
 
 const EditableBlock = ({ id, text, addBlock, deleteBlock, updateBlock }: EditableBlockProps ) => {
     const customInput = useRef<HTMLDivElement | null>(null)
@@ -75,18 +81,18 @@ const EditableBlock = ({ id, text, addBlock, deleteBlock, updateBlock }: Editabl
 
         if (e.key === 'ArrowUp') {
             e.preventDefault()
-            const previousElement = customInput.current!.previousElementSibling as HTMLElement
+            const previousElement = getPreviousBlock(customInput.current!)
 
-            if (previousElement?.classList.contains('block')) {
+            if (previousElement?.matches('.block')) {
                 setCaretToEnd(previousElement)
             }
         }
 
         if (e.key === 'ArrowDown') {
             e.preventDefault()
-            const nextElement = customInput.current!.nextElementSibling as HTMLElement
+            const nextElement = getNextBlock(customInput.current!)
 
-            if (nextElement?.classList.contains('block')) {
+            if (nextElement?.matches('.block')) {
                 setCaretToEnd(nextElement)
             }
         }
@@ -106,17 +112,28 @@ const EditableBlock = ({ id, text, addBlock, deleteBlock, updateBlock }: Editabl
 
     return (
         <div 
-            className="block"
-            ref={customInput}
-            placeholder="Type something"
-            contentEditable
-            suppressContentEditableWarning
-            onInput={handleChange}
-            onKeyDown={handleKeyDown}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-            dangerouslySetInnerHTML={{ __html: html }}
-        />
+            className='container'
+        >
+            <IconButton 
+                className="drag-icon"
+                size='small'
+            >
+                <DragIndicator />
+            </IconButton>
+            
+            <div 
+                className="block"
+                ref={customInput}
+                placeholder="Type something"
+                contentEditable
+                suppressContentEditableWarning
+                onInput={handleChange}
+                onKeyDown={handleKeyDown}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+                dangerouslySetInnerHTML={{ __html: html }}
+            />
+        </div>
     )
 }
 

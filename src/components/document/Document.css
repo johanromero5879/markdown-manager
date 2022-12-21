@@ -8,8 +8,22 @@
     flex-basis: 70%;
 }
 
-.markdown .block {
-    margin: 1rem 0;
+.markdown .container {
+    display: flex;
+    align-items: center;
+    margin: 0.75rem 0;
+}
+
+.markdown .container .drag-icon {
+    opacity: 0;
+}
+
+.markdown .container .block {
+    flex: 1;
+}
+
+.markdown .container:hover .drag-icon {
+    opacity: 1;
 }
 
 /* Markdown styles */
