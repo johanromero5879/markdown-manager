@@ -3,7 +3,13 @@ interface UserDocument {
     fullname: string
 }
 
-export default interface Document {
+export interface NewDocument {
+    title: string,
+    content: string
+}
+
+export interface Document {
+    id: string,
     title: string,
     content: string,
     created_by: UserDocument,

@@ -16,14 +16,11 @@ import {
 
 import PasswordField from './PasswordField'
 import useForm from '../../hooks/useForm'
-import { validator } from '../../models/user/user.validator'
+
+import { Auth } from '../../models/auth/auth'
+import { validator } from '../../models/auth/auth.validator'
 
 import './Forms.css'
-
-interface Credentials {
-    username: string,
-    password: string
-}
 
 const LoginForm = () => {
     // Location url
@@ -31,12 +28,12 @@ const LoginForm = () => {
     const state = location.state as { background?: Location }
     const navigate = useNavigate()
 
-    const initialState = {
+    const initialState: Auth = {
         username: '',
         password: ''
     }
 
-    const submit= () => {
+    const submit = () => {
         console.log('Submited')
     }
 
@@ -46,7 +43,7 @@ const LoginForm = () => {
         handleChange,
         handleBlur,
         handleSubmit 
-    } = useForm<Credentials>({
+    } = useForm<Auth>({
         initialState,
         validator,
         submit

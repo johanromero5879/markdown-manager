@@ -1,14 +1,9 @@
-import { NewUser } from './user'
 import { Validator, ErrorValidator } from '../validator'
+import { Auth } from './auth'
 
-export const validator: Validator<NewUser> = (fieldName, values) => {
-
+export const validator: Validator<Auth> = (fieldName, values) => {
     const errors: ErrorValidator = {}
-    const { fullname, username, password, confirmPassword } = values
-
-    if (fieldName === 'fullname') {
-        validateFullname(fullname, errors)
-    }
+    const { username, password } = values
 
     if (fieldName === 'username') {
         validateUsername(username, errors)
@@ -18,33 +13,7 @@ export const validator: Validator<NewUser> = (fieldName, values) => {
         validatePassword(password, errors)
     }
 
-    if (fieldName === 'confirmPassword') {
-        validateConfirmPassword(confirmPassword, password, errors)
-    }
-
     return errors
-
-} 
-
-const validateFullname = (fullname: string, errors: ErrorValidator) => {
-
-    if(!fullname) {
-        errors.fullname = "Fullname is required."
-        return false
-    }
-
-    if(!/^[a-zA-ZÀ-ÿ\u00f1\u00d1 ]{6,40}$/.test(fullname)) {
-        errors.fullname = "Fullname must have between 6 and 40 alphabetic characters."
-        return false
-    }
-
-    if(/[ ]{2,}/.test(fullname)) {
-        errors.fullname = "Fullname must not have 2 or more white space in a row."
-        return false
-    }
-
-    return true
-
 }
 
 const validateUsername = (username: string, errors: ErrorValidator) => {
@@ -97,17 +66,6 @@ const validatePassword = (password: string, errors: ErrorValidator) => {
 
     if(!/[0-9]+/.test(password)) {
         errors.password = "Password must include at least 1 number."
-        return false
-    }
-
-    return true
-
-}
-
-const validateConfirmPassword = (confirm: string, password: string, errors: ErrorValidator) => {
-
-    if(!confirm || confirm !== password) {
-        errors.confirmPassword = "It must be equal than the password."
         return false
     }
 

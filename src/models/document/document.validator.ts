@@ -1,7 +1,7 @@
-import Document from './document'
+import { NewDocument } from './document'
 import { Validator, ErrorValidator } from '../validator'
 
-export const validator: Validator<Document> = (fieldName, values) => {
+export const validator: Validator<NewDocument> = (fieldName, values) => {
 
     const errors: ErrorValidator = {}
     const { title, content } = values

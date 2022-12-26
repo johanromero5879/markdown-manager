@@ -16,16 +16,10 @@ import {
 
 import PasswordField from './PasswordField'
 import useForm from '../../hooks/useForm'
+import { NewUser } from '../../models/user/user'
 import { validator } from '../../models/user/user.validator'
 
 import './Forms.css'
-
-interface NewUser {
-    fullname: string,
-    username: string,
-    password: string,
-    confirmPassword: string
-}
 
 const SignupForm = () => {
     // Location url
@@ -34,9 +28,9 @@ const SignupForm = () => {
 
     const navigate = useNavigate()
     
-    const initialState = {
-        fullname:'',
+    const initialState: NewUser = {
         username: '',
+        fullname: '',
         password: '',
         confirmPassword: ''
     }

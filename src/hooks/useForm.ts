@@ -6,9 +6,11 @@ import {
     useState 
 } from 'react'
 
+import { Validator } from '../models/validator'
+
 interface FormProps<FormState> {
     initialState: FormState,
-    validator: Function,
+    validator: Validator<FormState>,
     submit: () => void
 }
 
@@ -49,11 +51,15 @@ const useForm = <FormState>({ initialState, validator, submit }: FormProps<FormS
         e.preventDefault()
 
         // Validate all fields at the same time
-        const validations = {} as FormState
+        const validations: any = {}
         for (const key in state) {
-            const error = validator(key, state)
-            validations[key] = error[key]
+            const errors = validator(key, state)
+            
+            if (!!errors[key]) {
+                validations[key] = errors[key]
+            }
         }
+
         setErrors({...errors, ...validations })
         setSubmited(true)
     }
