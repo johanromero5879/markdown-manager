@@ -16,9 +16,12 @@ import EditableBlock,
 { RefBlock, setBlockFocus, getNextBlock, getPreviousBlock} from './EditableBlock'
 
 import './DocumentEditor.css'
+import useForm from '../../hooks/useForm'
 
 const EditorDocument = () => {
+    const initialState = { title: '', content: '' }
     const { blocks, addBlock, deleteBlock, updateBlock, getText } = useBlocks()
+    // const {} = useForm({ initialState,  })
     const [nameInput, setNameInput] = useState({ value: '', disabled: false })
 
     /**

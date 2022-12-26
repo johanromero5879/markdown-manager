@@ -1,25 +1,33 @@
-import User from './User'
+import User from './user'
+import { Validator, ErrorValidator } from '../validator'
 
-export const validator = (fieldName: string, values: User) => {
-    const errors = {}
-    switch(fieldName) {
-        case 'fullname':
-            validateFullname(values.fullname, errors)
-            break
-        case 'username':
-            validateUsername(values.username, errors)
-            break
-        case 'password':
-            validatePassword(values.password, errors)
-            break
-        case 'confirmPassword':
-            validateConfirmPassword(values.confirmPassword, values.password, errors)
-            break
+export const validator: Validator<User> = (fieldName, values) => {
+
+    const errors: ErrorValidator = {}
+    const { fullname, username, password, confirmPassword } = values
+
+    if (fieldName === 'fullname') {
+        validateFullname(fullname, errors)
     }
+
+    if (fieldName === 'username') {
+        validateUsername(username, errors)
+    }
+
+    if (fieldName === 'password') {
+        validatePassword(password, errors)
+    }
+
+    if (fieldName === 'confirmPassword') {
+        validateConfirmPassword(confirmPassword, password, errors)
+    }
+
     return errors
+
 } 
 
-const validateFullname = (fullname: string, errors: any) => {
+const validateFullname = (fullname: string, errors: ErrorValidator) => {
+
     if(!fullname) {
         errors.fullname = "Fullname is required."
         return false
@@ -36,9 +44,11 @@ const validateFullname = (fullname: string, errors: any) => {
     }
 
     return true
+
 }
 
-const validateUsername = (username: string, errors: any) => {
+const validateUsername = (username: string, errors: ErrorValidator) => {
+
     if(!username) {
         errors.username = "Username is required."
         return false
@@ -60,9 +70,11 @@ const validateUsername = (username: string, errors: any) => {
     }
 
     return true
+
 }
 
-const validatePassword = (password: string, errors: any) => {
+const validatePassword = (password: string, errors: ErrorValidator) => {
+
     if(!password) {
         errors.password = "Password is required."
         return false
@@ -89,13 +101,16 @@ const validatePassword = (password: string, errors: any) => {
     }
 
     return true
+
 }
 
-const validateConfirmPassword = (confirm: string, password: string, errors: any) => {
+const validateConfirmPassword = (confirm: string, password: string, errors: ErrorValidator) => {
+
     if(!confirm || confirm !== password) {
-        errors.confirmPassword = "It must be equal than password."
+        errors.confirmPassword = "It must be equal than the password."
         return false
     }
 
     return true
+
 }

@@ -16,7 +16,7 @@ import {
 
 import PasswordField from './PasswordField'
 import useForm from '../../hooks/useForm'
-import { validator } from '../../models/user/UserValidator'
+import { validator } from '../../models/user/user.validator'
 
 import './Forms.css'
 
