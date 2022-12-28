@@ -43,7 +43,6 @@ const SignupForm = () => {
         state: newUser,
         errors,
         handleChange, 
-        handleBlur,
         handleSubmit
     } = useForm<NewUser>({
         initialState,
@@ -71,7 +70,6 @@ const SignupForm = () => {
                         variant="outlined" 
                         value={newUser.fullname}
                         onChange={handleChange}
-                        onBlur={handleBlur}
                         error={!!errors.fullname}
                         helperText={errors.fullname}
                     />
@@ -82,7 +80,6 @@ const SignupForm = () => {
                         variant="outlined" 
                         value={newUser.username}
                         onChange={handleChange}
-                        onBlur={handleBlur}
                         error={!!errors.username}
                         helperText={errors.username}
                     />
@@ -91,7 +88,6 @@ const SignupForm = () => {
                         label='Password'
                         name='password'
                         onChange={handleChange}
-                        onBlur={handleBlur}
                         error={!!errors.password}
                         helperText={errors.password}
                     />
@@ -100,7 +96,6 @@ const SignupForm = () => {
                         label='Confirm password'
                         name='confirmPassword'
                         onChange={handleChange}
-                        onBlur={handleBlur}
                         error={!!errors.confirmPassword}
                         helperText={errors.confirmPassword}
                     />

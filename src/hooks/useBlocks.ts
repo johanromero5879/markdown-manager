@@ -10,10 +10,10 @@ const uid = () => Date.now().toString(36) + Math.random().toString(36).substring
 
 const useBlocks = () => {
     const [blocks, setBlocks] = useState<Block[]>([{id: uid(), text: ''}])
-    const [text, setText] = useState('')
+    const [content, setContent] = useState('')
 
     useEffect(() => {
-        setText(
+        setContent(
             blocks.reduce((previousValue, currentValue) => previousValue + currentValue.text + '\n\n', '').trim()
         )
     }, [blocks])
@@ -45,7 +45,7 @@ const useBlocks = () => {
         }
     }
 
-    return { blocks, text, addBlock, deleteBlock, updateBlock }
+    return { blocks, content, addBlock, deleteBlock, updateBlock }
 }
 
 export default useBlocks

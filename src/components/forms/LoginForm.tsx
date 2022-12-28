@@ -41,7 +41,6 @@ const LoginForm = () => {
         state: credentials,
         errors, 
         handleChange,
-        handleBlur,
         handleSubmit 
     } = useForm<Auth>({
         initialState,
@@ -70,7 +69,6 @@ const LoginForm = () => {
                         variant="outlined" 
                         value={credentials.username}
                         onChange={handleChange}
-                        onBlur={handleBlur}
                         error={!!errors.username}
                         helperText={errors.username}
                     />
@@ -79,7 +77,6 @@ const LoginForm = () => {
                         label='Password'
                         name='password'
                         onChange={handleChange}
-                        onBlur={handleBlur}
                         error={!!errors.password}
                         helperText={errors.password}
                     />

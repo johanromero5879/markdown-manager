@@ -52,17 +52,17 @@ export const getPreviousBlock = (element: HTMLElement) => element.parentElement?
 export const getNextBlock = (element: HTMLElement) => element.parentElement?.nextElementSibling?.lastChild as HTMLElement 
 
 const EditableBlock = ({ id, text, addBlock, deleteBlock, updateBlock }: EditableBlockProps ) => {
-    const customInput = useRef<HTMLDivElement | null>(null)
+    const customInput = useRef<HTMLDivElement>(null)
     const [html, setHTML] = useState(text)
-    const [focus, setFocus] = useState(true)
+    const focus = useRef(true)
     const previousKey = useRef('')
-
+    
     useEffect(() => {
         setBlockFocus(customInput.current!)
     }, [])
 
     useEffect(() => {
-        if (focus) {
+        if (focus.current) {
             customInput.current!.innerText = text
             setBlockFocus(customInput.current!)
         }
@@ -106,19 +106,17 @@ const EditableBlock = ({ id, text, addBlock, deleteBlock, updateBlock }: Editabl
             }
         }
         
-        if (previousKey.current !== 'Shift') {
-            previousKey.current = e.key
-        }
+        previousKey.current = e.key
         
     }
 
     const handleFocus = () => {
-        setFocus(true)
+        focus.current = true
         setHTML(text)
     }
 
     const handleBlur = () => {
-        setFocus(false)
+        focus.current = false
         setHTML( markdown.render(text) )
     }
 
