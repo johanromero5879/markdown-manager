@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { flushSync } from 'react-dom'
 
 export interface Block {
@@ -10,6 +10,13 @@ const uid = () => Date.now().toString(36) + Math.random().toString(36).substring
 
 const useBlocks = () => {
     const [blocks, setBlocks] = useState<Block[]>([{id: uid(), text: ''}])
+    const [text, setText] = useState('')
+
+    useEffect(() => {
+        setText(
+            blocks.reduce((previousValue, currentValue) => previousValue + currentValue.text + '\n\n', '').trim()
+        )
+    }, [blocks])
 
     const addBlock = (currentID: string) => {
         const newBlock = { id: uid(), text: '' }
@@ -38,9 +45,7 @@ const useBlocks = () => {
         }
     }
 
-    const getText = () => blocks.reduce((previousValue, currentValue) => previousValue + currentValue.text + '\n\n', '').trim()
-
-    return {blocks, addBlock, deleteBlock, updateBlock, getText}
+    return { blocks, text, addBlock, deleteBlock, updateBlock }
 }
 
 export default useBlocks

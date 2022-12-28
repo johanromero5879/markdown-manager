@@ -15,7 +15,7 @@ import {
 } from 'react-router-dom'
 
 import PasswordField from './PasswordField'
-import useForm from '../../hooks/useForm'
+import { useForm } from '../../hooks/useForm'
 import { NewUser } from '../../models/user/user'
 import { validator } from '../../models/user/user.validator'
 
@@ -35,8 +35,8 @@ const SignupForm = () => {
         confirmPassword: ''
     }
 
-    const submit= () => {
-        console.log('Submited')
+    const submit = async () => {
+        console.log('Submited by SignupForm')
     }
 
     const {

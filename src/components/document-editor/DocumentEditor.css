@@ -4,7 +4,6 @@
 
 .markdown .container {
     display: flex;
-    align-items: center;
     margin: 0.75rem 0;
 }
 
@@ -18,6 +17,7 @@
 
 .markdown .container .block {
     flex: 1;
+    align-self: center;
 }
 
 /* Markdown styles */
@@ -36,13 +36,12 @@
 }
 
 .markdown .block img {
-    max-height: 250px;
+    width: 100%;
 }
 
 .markdown .block p:has(img) {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: grid;
+    row-gap: 1;
 }
 
 .markdown .block mark {

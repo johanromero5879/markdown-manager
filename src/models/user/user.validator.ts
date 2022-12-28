@@ -28,7 +28,7 @@ export const validator: Validator<NewUser> = (fieldName, values) => {
 
 const validateFullname = (fullname: string, errors: ErrorValidator) => {
 
-    if(!fullname) {
+    if(!fullname || fullname.length === 0) {
         errors.fullname = "Fullname is required."
         return false
     }
@@ -49,7 +49,7 @@ const validateFullname = (fullname: string, errors: ErrorValidator) => {
 
 const validateUsername = (username: string, errors: ErrorValidator) => {
 
-    if(!username) {
+    if(!username || username.length === 0) {
         errors.username = "Username is required."
         return false
     }
@@ -75,7 +75,7 @@ const validateUsername = (username: string, errors: ErrorValidator) => {
 
 const validatePassword = (password: string, errors: ErrorValidator) => {
 
-    if(!password) {
+    if(!password || password.length === 0) {
         errors.password = "Password is required."
         return false
     }

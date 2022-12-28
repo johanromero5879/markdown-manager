@@ -8,8 +8,10 @@ import {
     OutlinedInput
 } from '@mui/material'
 
-import Visibility from '@mui/icons-material/Visibility'
-import VisibilityOff from '@mui/icons-material/VisibilityOff'
+import { 
+    Visibility,
+    VisibilityOff
+} from '@mui/icons-material'
 
 interface PasswordFieldProps {
     error? : boolean,

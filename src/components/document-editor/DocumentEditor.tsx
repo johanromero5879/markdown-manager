@@ -1,7 +1,9 @@
-import { useState, ChangeEvent} from 'react'
+import { useState, FormEvent, ChangeEvent, FocusEvent, useEffect } from 'react'
 import { 
     Card,
-    InputBase,
+    FormControl,
+    FormHelperText,
+    Input,
     InputAdornment,
     IconButton,
     Divider,
@@ -15,14 +17,65 @@ import useBlocks from '../../hooks/useBlocks'
 import EditableBlock, 
 { RefBlock, setBlockFocus, getNextBlock, getPreviousBlock} from './EditableBlock'
 
+import { NewDocument } from '../../models/document/document'
+import { validator } from '../../models/document/document.validator'
+
 import './DocumentEditor.css'
-import useForm from '../../hooks/useForm'
 
 const EditorDocument = () => {
-    const initialState = { title: '', content: '' }
-    const { blocks, addBlock, deleteBlock, updateBlock, getText } = useBlocks()
-    // const {} = useForm({ initialState,  })
-    const [nameInput, setNameInput] = useState({ value: '', disabled: false })
+    const { blocks, text, addBlock, deleteBlock, updateBlock } = useBlocks()
+    const [nameDisabled, setNameDisabled] = useState(false)
+    const [document, setDocument] = useState<NewDocument>({ title: '', content: '' })
+    const [errors, setErrors] = useState<NewDocument>({} as NewDocument)
+
+    useEffect(() => {
+        setDocument(document => ({...document, content: text}))
+    }, [text])
+
+    const isValid = () => {
+        // Validate all fields at the same time
+        const validations: any = {}
+        
+        for (const key in document) {
+            const errors = validator(key, document)
+            
+            if (!!errors[key]) {
+                validations[key] = errors[key]
+            }
+        }
+
+        setErrors(validations)
+
+        // True if there is any key in validations object
+        return Object.keys(validations!).length === 0
+    }
+
+    const handleChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
+        setDocument({...document, [target.name]: target.value})
+    }
+
+    const handleBlur = ({ target }: FocusEvent<HTMLInputElement>) => {
+        const { name } = target
+
+        const error = validator(name, document)
+        setErrors({...errors, [name]: error[name]})
+
+        if (!error[name]) {
+            setNameDisabled(true)
+        }
+    }
+
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+
+        if (isValid()) {
+            submit()
+        }
+    }
+
+    const submit = async () => {
+        console.log(document)
+    }
 
     /**
      * Add a new block after current one
@@ -48,51 +101,54 @@ const EditorDocument = () => {
     }
 
     /**
-     * Handle an event when document name has changed
-     */
-    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setNameInput({...nameInput, value: event.target.value})
-    }
-
-    /**
      * Change disabled value of document name's input
      */
-    const handleDisabled = () => {
-        setNameInput({...nameInput, disabled: !nameInput.disabled})
-    }
-
-    const handleCreate = () => {
-        console.log(getText())
+    const toggleNameDisabled = () => {
+        setNameDisabled(!nameDisabled)
     }
 
     return (
         <div className="editor">
             <Card className="card">
-                <div className="header">
-                    <InputBase
+                <form className="header" onSubmit={handleSubmit}>
+                    <FormControl 
+                        variant='standard' 
                         sx={{ 'marginLeft': '0.5rem' }}
-                        disabled={nameInput.disabled}
-                        placeholder="Type a name"
-                        value={nameInput.value}
-                        onChange={handleChange}
-                        endAdornment={
-                            <InputAdornment position='end'>
-                                <IconButton onClick={handleDisabled}>
-                                    { nameInput.disabled ? <BorderColor /> : <EditOff />}
-                                </IconButton>
-                            </InputAdornment>
-                        }
-                    />
+                    >
+                        <Input
+                            disabled={nameDisabled}
+                            disableUnderline={!errors.title}
+                            placeholder="Type a title"
+                            name="title"
+                            value={document.title}
+                            error={!!errors.title}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            endAdornment={
+                                <InputAdornment position='end'>
+                                    <IconButton onClick={toggleNameDisabled}>
+                                        { nameDisabled ? <BorderColor /> : <EditOff />}
+                                    </IconButton>
+                                </InputAdornment>
+                            }
+                        />
+                        <FormHelperText error={!!errors.title}>
+                            { errors.title }
+                        </FormHelperText>
+                    </FormControl>
                     <Button 
                         variant='contained'
-                        onClick={handleCreate}
+                        type='submit'
                         endIcon={<Add />}
                     >
                         Create
                     </Button>
-                </div>
+                </form>
                 <Divider />
                 <div className='markdown'>
+                    <FormHelperText error={!!errors.content}>
+                        { errors.content }
+                    </FormHelperText>
                     {
                         blocks.map((block) => (
                             <EditableBlock 

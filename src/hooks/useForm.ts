@@ -2,7 +2,6 @@ import {
     ChangeEvent, 
     FocusEvent,
     FormEvent,
-    useEffect,
     useState 
 } from 'react'
 
@@ -11,30 +10,15 @@ import { Validator } from '../models/validator'
 interface FormProps<FormState> {
     initialState: FormState,
     validator: Validator<FormState>,
-    submit: () => void
+    submit: () => Promise<void>
 }
 
 type FormStatus = 'IDLE' | 'LOADING' | 'SUCCESS' | 'ERROR'
 
-const useForm = <FormState>({ initialState, validator, submit }: FormProps<FormState>) => {
+export const useForm = <FormState>({ initialState, validator, submit }: FormProps<FormState>) => {
     const [state, setState] = useState({...initialState})
     const [formStatus, setFormStatus] = useState<FormStatus>('IDLE')
-    const [submited, setSubmited] = useState(false)
     const [errors, setErrors] = useState<FormState>({} as FormState)
-
-    useEffect(() => {
-        const isValidErrors = Object.keys(errors!).length > 0
-
-        if(!isValidErrors && submited) {
-            setFormStatus('LOADING')
-            submit()
-            setFormStatus('SUCCESS')
-        }
-
-        setSubmited(false)
-
-        // eslint-disable-next-line
-    }, [submited])
 
     const handleChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
         setState({...state, [target.name]: target.value})
@@ -47,9 +31,7 @@ const useForm = <FormState>({ initialState, validator, submit }: FormProps<FormS
         setErrors({...errors, [name]: error[name]})
     }
 
-    const handleSubmit= (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-
+    const isValid = () => {
         // Validate all fields at the same time
         const validations: any = {}
         for (const key in state) {
@@ -59,20 +41,35 @@ const useForm = <FormState>({ initialState, validator, submit }: FormProps<FormS
                 validations[key] = errors[key]
             }
         }
+        setErrors(validations)
 
-        setErrors({...errors, ...validations })
-        setSubmited(true)
+        // True if there is any key in validations object
+        return Object.keys(validations!).length === 0
+    }
+
+    const execSubmit = async () => {
+        setFormStatus('LOADING')
+        await submit()
+        setFormStatus('SUCCESS')
+    }
+
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+    
+        if (isValid()) {
+            execSubmit()
+        }
     }
 
     const clearForm = () => {
         setState({...initialState})
-        setFormStatus('IDLE')
         setErrors({} as FormState)
-        setSubmited(false)
+        setFormStatus('IDLE')
     }
 
     return {
         state,
+        setState,
         formStatus,
         errors,
         handleChange,
@@ -81,5 +78,3 @@ const useForm = <FormState>({ initialState, validator, submit }: FormProps<FormS
         clearForm
     }
 }
-
-export default useForm

@@ -55,8 +55,7 @@ const EditableBlock = ({ id, text, addBlock, deleteBlock, updateBlock }: Editabl
     const customInput = useRef<HTMLDivElement | null>(null)
     const [html, setHTML] = useState(text)
     const [focus, setFocus] = useState(true)
-
-    let previousKey = ''
+    const previousKey = useRef('')
 
     useEffect(() => {
         setBlockFocus(customInput.current!)
@@ -79,7 +78,7 @@ const EditableBlock = ({ id, text, addBlock, deleteBlock, updateBlock }: Editabl
     }
 
     const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === 'Enter' && previousKey !== 'Shift') {
+        if (e.key === 'Enter' && previousKey.current !== 'Shift') {
             e.preventDefault()
             addBlock({id, ref: customInput.current!})
         }
@@ -107,7 +106,10 @@ const EditableBlock = ({ id, text, addBlock, deleteBlock, updateBlock }: Editabl
             }
         }
         
-        previousKey = e.key
+        if (previousKey.current !== 'Shift') {
+            previousKey.current = e.key
+        }
+        
     }
 
     const handleFocus = () => {
