@@ -1,8 +1,7 @@
 import { 
     ChangeEvent, 
-    FocusEvent,
     FormEvent,
-    useState 
+    useState
 } from 'react'
 
 import { Validator } from '../models/validator'
@@ -20,14 +19,8 @@ export const useForm = <FormState>({ initialState, validator, submit }: FormProp
     const [formStatus, setFormStatus] = useState<FormStatus>('IDLE')
     const [errors, setErrors] = useState<FormState>({} as FormState)
 
-    const handleChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
-        setState({...state, [target.name]: target.value})
-    }
-
-    const handleBlur = ({ target }: FocusEvent<HTMLInputElement>) => {
-        const { name } = target
-
-        const error = validator(name, state)
+    const validateField = (name: string, value: string) => {
+        const error = validator(name, {...state, [name]: value})
         setErrors({...errors, [name]: error[name]})
     }
 
@@ -35,11 +28,12 @@ export const useForm = <FormState>({ initialState, validator, submit }: FormProp
         // Validate all fields at the same time
         const validations: any = {}
         for (const key in state) {
+
             const errors = validator(key, state)
-            
-            if (!!errors[key]) {
+            if(errors[key]) {
                 validations[key] = errors[key]
             }
+            
         }
         setErrors(validations)
 
@@ -53,27 +47,32 @@ export const useForm = <FormState>({ initialState, validator, submit }: FormProp
         setFormStatus('SUCCESS')
     }
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-    
-        if (isValid()) {
-            execSubmit()
-        }
-    }
-
     const clearForm = () => {
         setState({...initialState})
         setErrors({} as FormState)
         setFormStatus('IDLE')
     }
 
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        if (isValid()) {
+            execSubmit()
+        }
+    }
+
+    const handleChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
+        validateField(target.name, target.value)
+        setState({...state, [target.name]: target.value})
+    }
+
     return {
         state,
         setState,
         formStatus,
+        validateField,
         errors,
+        setErrors,
         handleChange,
-        handleBlur,
         handleSubmit,
         clearForm
     }

@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, FocusEvent } from 'react'
+import { useState, ChangeEvent } from 'react'
 import {
     IconButton,
     InputAdornment,
@@ -19,11 +19,10 @@ interface PasswordFieldProps {
     label?: string,
     value?: string,
     name?: string,
-    onChange?: (e: ChangeEvent<HTMLInputElement>) => void,
-    onBlur?: (e: FocusEvent<HTMLInputElement>) => void
+    onChange?: (e: ChangeEvent<HTMLInputElement>) => void
 }
 
-const PasswordField = ({ label, value, name, onChange, onBlur, error, helperText }: PasswordFieldProps) => {
+const PasswordField = ({ label, value, name, onChange, error, helperText }: PasswordFieldProps) => {
     const [show, setShow] = useState(false)
 
     const toggleShow = () => {
@@ -40,7 +39,6 @@ const PasswordField = ({ label, value, name, onChange, onBlur, error, helperText
                 type={ show ? 'text': 'password' }
                 value={value}
                 onChange={onChange}
-                onBlur={onBlur}
                 error={error}
                 endAdornment={
                     <InputAdornment position="end">
