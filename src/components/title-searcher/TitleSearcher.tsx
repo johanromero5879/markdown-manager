@@ -1,4 +1,4 @@
-import { KeyboardEvent, useState } from 'react'
+import { useState } from 'react'
 import {
     Autocomplete,
     ClickAwayListener,
@@ -68,12 +68,9 @@ export const InputSearcher = () => {
     const [open, setOpen] = useState(false)
 
     const handleOpen = () => setOpen(true)
+    
     const handleClose = () => {
         setTimeout(() => setOpen(false), 100)
-    }
-
-    const handleKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
-        console.log(e.target.value)
     }
 
     return <>
@@ -103,8 +100,7 @@ export const InputSearcher = () => {
                             fullWidth
                             ref={params.InputProps.ref}
                             inputProps={params.inputProps}
-                            placeholder='Search titles' 
-                            onKeyUp={handleKeyUp}
+                            placeholder='Search titles'
                             disableUnderline
                             startAdornment={
                                 <InputAdornment position='start'>

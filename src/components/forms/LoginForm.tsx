@@ -17,10 +17,12 @@ import {
 import PasswordField from './PasswordField'
 import { useForm } from '../../hooks/useForm'
 
-import { Auth } from '../../models/auth/auth'
-import { validator } from '../../models/auth/auth.validator'
+import { Auth } from '../../models/user/user'
+import { UserValidator } from '../../models/user/user.validator'
 
 import './Forms.css'
+
+const validator = new UserValidator<Auth>()
 
 const LoginForm = () => {
     // Location url
@@ -30,10 +32,10 @@ const LoginForm = () => {
 
     const initialState: Auth = {
         username: '',
-        password: ''
+        password: '',
     }
 
-    const submit = async () => {
+    const onSubmit = async () => {
         console.log('Submited by LoginForm')
     }
 
@@ -45,7 +47,7 @@ const LoginForm = () => {
     } = useForm<Auth>({
         initialState,
         validator,
-        submit
+        onSubmit
     })
 
     

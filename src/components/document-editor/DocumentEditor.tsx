@@ -13,20 +13,22 @@ import {
 import { BorderColor, EditOff, Add } from '@mui/icons-material'
 
 import useBlocks from '../../hooks/useBlocks'
-import EditableBlock, 
-{ RefBlock, setBlockFocus, getNextBlock, getPreviousBlock} from './EditableBlock'
-import { validator } from '../../models/document/document.validator'
 import { useForm } from '../../hooks/useForm'
-import { NewDocument } from '../../models/document/document'
+import { DocumentValidator } from '../../models/document/document.validator'
+import { BaseDocument } from '../../models/document/document'
+
+import EditableBlock, { RefBlock, setBlockFocus, getNextBlock, getPreviousBlock} from './EditableBlock'
 
 import './DocumentEditor.css'
+
+const validator = new DocumentValidator()
 
 const EditorDocument = () => {
     const initialState = { title: '', content: '' }
     const { blocks, content, addBlock, deleteBlock, updateBlock } = useBlocks()
     const [nameDisabled, setNameDisabled] = useState(false)
 
-    const submit = async () => {
+    const onSubmit = async () => {
         console.log(state)
     }
 
@@ -37,10 +39,10 @@ const EditorDocument = () => {
         errors,
         handleChange,
         handleSubmit 
-    } = useForm<NewDocument>({ 
+    } = useForm<BaseDocument>({ 
         initialState, 
         validator, 
-        submit 
+        onSubmit 
     })
 
     useEffect(() => {
@@ -109,6 +111,7 @@ const EditorDocument = () => {
                         </FormHelperText>
                     </FormControl>
                     <Button 
+                        disabled={Object.keys(errors).length > 0}
                         variant='contained'
                         type='submit'
                         endIcon={<Add />}

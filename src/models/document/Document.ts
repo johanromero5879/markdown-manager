@@ -1,19 +1,14 @@
-interface UserDocument {
-    username: string,
-    fullname: string
-}
+import { BaseUser } from '../user/user'
 
-export interface NewDocument {
+export interface BaseDocument {
     title: string,
     content: string
 }
 
-export interface Document {
+export interface Document extends BaseDocument {
     id: string,
-    title: string,
-    content: string,
-    created_by: UserDocument,
-    modified_by: UserDocument,
+    created_by: BaseUser,
+    modified_by: BaseUser,
     created_at: Date,
     modified_at: Date
 }
