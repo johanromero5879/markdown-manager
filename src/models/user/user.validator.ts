@@ -1,116 +1,85 @@
-import { NewUser } from './user'
-import { Validator, ErrorValidator } from '../validator'
+import { Validator, ErrorValidation } from '../validator'
+import { NewUser, Auth } from './user'
 
-export const validator: Validator<NewUser> = (fieldName, values) => {
+// eslint-disable-next-line
+type UserUnion = NewUser | Auth 
 
-    const errors: ErrorValidator = {}
-    const { fullname, username, password, confirmPassword } = values
+export class UserValidator<UserUnion> extends Validator<UserUnion> {
 
-    if (fieldName === 'fullname') {
-        validateFullname(fullname, errors)
+    validateAll(values: UserUnion) {
+        
+        const fields = values as unknown as NewUser
+
+        if ('confirmPassword' in fields) {
+            const confirmPasswordError = this.validateField(
+                'confirmPassword' as keyof UserUnion, 
+                fields.confirmPassword, 
+                fields.password
+            )
+
+            if (confirmPasswordError)  {
+                const errors = super.validateAll(values) as unknown as ErrorValidation<NewUser>
+                errors.confirmPassword = confirmPasswordError
+                
+                return errors as ErrorValidation<UserUnion>
+            }
+        }
+        
+        return super.validateAll(values)
+
     }
 
-    if (fieldName === 'username') {
-        validateUsername(username, errors)
+    validateField(name: keyof UserUnion, value: string, compareTo?: string) {
+        
+        if (name === 'fullname') return this.validateFullname(value)
+    
+        if (name === 'username') return this.validateUsername(value)
+
+        if (name === 'password') return this.validatePassword(value)
+
+        if (name === 'confirmPassword' && compareTo) return this.validateConfirmPassword(value, compareTo)
+
     }
 
-    if (fieldName === 'password') {
-        validatePassword(password, errors)
+    private validateFullname(fullname: string) {
+
+        if(!fullname || fullname.length === 0) return "Fullname is required."
+    
+        if(!/^[a-zA-ZÀ-ÿ\u00f1\u00d1 ]{6,40}$/.test(fullname)) return "Fullname must have between 6 and 40 alphabetic characters."
+    
+        if(/[ ]{2,}/.test(fullname)) return "Fullname must not have 2 or more white space in a row."
+    
     }
 
-    if (fieldName === 'confirmPassword') {
-        validateConfirmPassword(confirmPassword, password, errors)
+    private validateUsername(username: string) {
+
+        if(!username || username.length === 0) return "Username is required."
+    
+        if(!/^[\w.]{8,20}$/.test(username)) return "Username must have between 8 and 20 alphanumeric characters, including special characters: ._"
+    
+        if(!/^[^_.].*[^_.]$/.test(username)) return "Username must not start or finish with a special character."
+    
+        if(/[_.]{2}/.test(username)) return "Username must not have 2 or more special characters in a row."
+    
     }
 
-    return errors
+    private validatePassword(password: string) {
 
-} 
-
-const validateFullname = (fullname: string, errors: ErrorValidator) => {
-
-    if(!fullname || fullname.length === 0) {
-        errors.fullname = "Fullname is required."
-        return false
+        if(!password || password.length === 0) return "Password is required."
+    
+        if(!/^[A-Za-z0-9_.@$!%*?&]{8,20}$/.test(password)) return "Password must have between 8 and 20 characters."
+    
+        if(!/[_.@$!%*?&]+/.test(password)) return "Password must include at least 1 special character _.@$!%*?&"
+    
+        if(!/[A-Z]+/.test(password)) return "Password must include at least 1 uppercase."
+    
+        if(!/[0-9]+/.test(password)) return "Password must include at least 1 number."
+    
     }
 
-    if(!/^[a-zA-ZÀ-ÿ\u00f1\u00d1 ]{6,40}$/.test(fullname)) {
-        errors.fullname = "Fullname must have between 6 and 40 alphabetic characters."
-        return false
+    private validateConfirmPassword(confirm: string, password: string) {
+
+        if(confirm !== password) return "It must be equal than the password."
+    
     }
-
-    if(/[ ]{2,}/.test(fullname)) {
-        errors.fullname = "Fullname must not have 2 or more white space in a row."
-        return false
-    }
-
-    return true
-
-}
-
-const validateUsername = (username: string, errors: ErrorValidator) => {
-
-    if(!username || username.length === 0) {
-        errors.username = "Username is required."
-        return false
-    }
-
-    if(!/^[\w.]{8,20}$/.test(username)) {
-        errors.username = "Username must have between 8 and 20 alphanumeric characters, including special characters: ._"
-        return false
-    }
-
-    if(!/^[^_.].*[^_.]$/.test(username)) {
-        errors.username = "Username must not start or finish with a special character."
-        return false
-    }
-
-    if(/[_.]{2}/.test(username)) {
-        errors.username = "Username must not have 2 or more special characters in a row."
-        return false
-    }
-
-    return true
-
-}
-
-const validatePassword = (password: string, errors: ErrorValidator) => {
-
-    if(!password || password.length === 0) {
-        errors.password = "Password is required."
-        return false
-    }
-
-    if(!/^[A-Za-z0-9_.@$!%*?&]{8,20}$/.test(password)) {
-        errors.password = "Password must have between 8 and 20 characters."
-        return false
-    }
-
-    if(!/[_.@$!%*?&]+/.test(password)) {
-        errors.password = "Password must include at least 1 special character _.@$!%*?&"
-        return false
-    }
-
-    if(!/[A-Z]+/.test(password)) {
-        errors.password = "Password must include at least 1 uppercase."
-        return false
-    }
-
-    if(!/[0-9]+/.test(password)) {
-        errors.password = "Password must include at least 1 number."
-        return false
-    }
-
-    return true
-
-}
-
-const validateConfirmPassword = (confirm: string, password: string, errors: ErrorValidator) => {
-
-    if(!confirm || confirm !== password) {
-        errors.confirmPassword = "It must be equal than the password."
-        return false
-    }
-
-    return true
-
 }

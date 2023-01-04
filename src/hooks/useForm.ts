@@ -4,65 +4,76 @@ import {
     useState
 } from 'react'
 
-import { Validator } from '../models/validator'
+import { IValidator, ErrorValidation } from '../models/validator'
 
 interface FormProps<FormState> {
     initialState: FormState,
-    validator: Validator<FormState>,
-    submit: () => Promise<void>
+    validator: IValidator<FormState>,
+    onSubmit: () => Promise<void>
 }
 
 type FormStatus = 'IDLE' | 'LOADING' | 'SUCCESS' | 'ERROR'
 
-export const useForm = <FormState>({ initialState, validator, submit }: FormProps<FormState>) => {
+export const useForm = <FormState>({ initialState, validator, onSubmit }: FormProps<FormState>) => {
     const [state, setState] = useState({...initialState})
     const [formStatus, setFormStatus] = useState<FormStatus>('IDLE')
-    const [errors, setErrors] = useState<FormState>({} as FormState)
+    const [errors, setErrors] = useState({} as ErrorValidation<FormState>)
 
-    const validateField = (name: string, value: string) => {
-        const error = validator(name, {...state, [name]: value})
-        setErrors({...errors, [name]: error[name]})
-    }
+    const validateField = (name: keyof FormState, value: string) => {
 
-    const isValid = () => {
-        // Validate all fields at the same time
-        const validations: any = {}
-        for (const key in state) {
+        const error = validator.validateField(name, value)
+        
+        setErrors((errors) => {
 
-            const errors = validator(key, state)
-            if(errors[key]) {
-                validations[key] = errors[key]
+            if (!error) {
+                delete errors[name]
+                return errors
             }
-            
-        }
-        setErrors(validations)
 
-        // True if there is any key in validations object
-        return Object.keys(validations!).length === 0
+            return {...errors, [name]: error}
+        })
+
     }
 
-    const execSubmit = async () => {
+    const validate = () => {
+
+        const errors = validator.validateAll(state)
+        if (errors && Object.keys(errors).length > 0) {
+            setErrors(errors)
+            return false
+        }
+
+        return true
+
+    }
+
+    const submit = async () => {
+
         setFormStatus('LOADING')
-        await submit()
+        await onSubmit()
         setFormStatus('SUCCESS')
+
     }
 
     const clearForm = () => {
+
         setState({...initialState})
-        setErrors({} as FormState)
+        setErrors({} as ErrorValidation<FormState>)
         setFormStatus('IDLE')
+
     }
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+
         e.preventDefault()
-        if (isValid()) {
-            execSubmit()
-        }
+        if (validate()) submit()
+
     }
 
     const handleChange = ({ target }: ChangeEvent<HTMLInputElement>) => {
-        validateField(target.name, target.value)
+        validateField(target.name as keyof FormState, target.value)
         setState({...state, [target.name]: target.value})
+
     }
 
     return {

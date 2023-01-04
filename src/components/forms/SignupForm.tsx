@@ -17,9 +17,11 @@ import {
 import PasswordField from './PasswordField'
 import { useForm } from '../../hooks/useForm'
 import { NewUser } from '../../models/user/user'
-import { validator } from '../../models/user/user.validator'
+import { UserValidator } from '../../models/user/user.validator'
 
 import './Forms.css'
+
+const validator = new UserValidator<NewUser>()
 
 const SignupForm = () => {
     // Location url
@@ -35,19 +37,19 @@ const SignupForm = () => {
         confirmPassword: ''
     }
 
-    const submit = async () => {
+    const onSubmit = async () => {
         console.log('Submited by SignupForm')
     }
 
     const {
-        state: newUser,
+        state: user,
         errors,
         handleChange, 
         handleSubmit
     } = useForm<NewUser>({
         initialState,
         validator,
-        submit
+        onSubmit
     })
 
     const handleClose = () => {
@@ -68,7 +70,7 @@ const SignupForm = () => {
                         name="fullname"
                         label="Full name" 
                         variant="outlined" 
-                        value={newUser.fullname}
+                        value={user.fullname}
                         onChange={handleChange}
                         error={!!errors.fullname}
                         helperText={errors.fullname}
@@ -78,13 +80,13 @@ const SignupForm = () => {
                         name="username"
                         label="Username" 
                         variant="outlined" 
-                        value={newUser.username}
+                        value={user.username}
                         onChange={handleChange}
                         error={!!errors.username}
                         helperText={errors.username}
                     />
                     <PasswordField 
-                        value={newUser.password}
+                        value={user.password}
                         label='Password'
                         name='password'
                         onChange={handleChange}
@@ -92,7 +94,7 @@ const SignupForm = () => {
                         helperText={errors.password}
                     />
                     <PasswordField 
-                        value={newUser.confirmPassword}
+                        value={user.confirmPassword}
                         label='Confirm password'
                         name='confirmPassword'
                         onChange={handleChange}

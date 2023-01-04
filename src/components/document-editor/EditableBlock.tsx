@@ -42,14 +42,33 @@ export const setBlockFocus = (element: HTMLElement) => {
 }
 
 /**
+ * Get a block div by a parent element
+ */
+const getBlockChild = (parent: Element | null | undefined) => {
+    const children = parent?.children
+    const len = children?.length || 0
+
+    for (let i = 0; i < len; i++) {
+        const child = children!.item(i)!
+        if (typeof child.matches === 'function' && child.matches('.block')) {
+            return child as HTMLElement
+        }
+    }
+}
+
+/**
  * Get previous block by given one
  */
-export const getPreviousBlock = (element: HTMLElement) => element.parentElement?.previousElementSibling?.lastChild as HTMLElement
+export const getPreviousBlock = (element: HTMLElement) =>  {
+    return getBlockChild(element.parentElement?.previousElementSibling)
+}
 
 /**
  * Get next block by given one
  */
-export const getNextBlock = (element: HTMLElement) => element.parentElement?.nextElementSibling?.lastChild as HTMLElement 
+export const getNextBlock = (element: HTMLElement) => {
+    return getBlockChild(element.parentElement?.nextElementSibling)
+} 
 
 const EditableBlock = ({ id, text, addBlock, deleteBlock, updateBlock }: EditableBlockProps ) => {
     const customInput = useRef<HTMLDivElement>(null)
@@ -92,7 +111,7 @@ const EditableBlock = ({ id, text, addBlock, deleteBlock, updateBlock }: Editabl
             e.preventDefault()
             const previousElement = getPreviousBlock(customInput.current!)
 
-            if (previousElement?.matches('.block')) {
+            if (previousElement) {
                 setBlockFocus(previousElement)
             }
         }
@@ -101,7 +120,7 @@ const EditableBlock = ({ id, text, addBlock, deleteBlock, updateBlock }: Editabl
             e.preventDefault()
             const nextElement = getNextBlock(customInput.current!)
 
-            if (nextElement?.matches('.block')) {
+            if (nextElement) {
                 setBlockFocus(nextElement)
             }
         }
