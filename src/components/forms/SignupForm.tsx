@@ -1,4 +1,3 @@
-import { ChangeEvent } from 'react'
 import { 
     Dialog,
     DialogTitle,
@@ -45,7 +44,6 @@ const SignupForm = () => {
     const {
         state: user,
         errors,
-        setErrors,
         handleChange, 
         handleSubmit
     } = useForm<NewUser>({
@@ -56,18 +54,6 @@ const SignupForm = () => {
 
     const handleClose = () => {
         navigate('/')
-    }
-
-    const onChangeConfirmPassword = (event: ChangeEvent<HTMLInputElement>) => {
-        const { password } = user
-        const confirmPassword = event.target.value
-
-        if (confirmPassword === password){
-            const error = validator.validateField('confirmPassword', confirmPassword, password)
-            if (error) setErrors({...errors, confirmPassword: error})
-        }
-
-        handleChange(event)
     }
 
     return (
@@ -111,7 +97,7 @@ const SignupForm = () => {
                         value={user.confirmPassword}
                         label='Confirm password'
                         name='confirmPassword'
-                        onChange={onChangeConfirmPassword}
+                        onChange={handleChange}
                         error={!!errors.confirmPassword}
                         helperText={errors.confirmPassword}
                     />

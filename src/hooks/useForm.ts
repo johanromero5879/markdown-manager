@@ -82,7 +82,6 @@ export const useForm = <FormState>({ initialState, validator, onSubmit }: FormPr
         formStatus,
         validateField,
         errors,
-        setErrors,
         handleChange,
         handleSubmit,
         clearForm
