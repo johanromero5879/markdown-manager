@@ -111,7 +111,6 @@ const EditorDocument = () => {
                         </FormHelperText>
                     </FormControl>
                     <Button 
-                        disabled={Object.keys(errors).length > 0}
                         variant='contained'
                         type='submit'
                         endIcon={<Add />}
