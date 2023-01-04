@@ -1,5 +1,5 @@
-import { Validator } from '../validator'
-import { BaseDocument } from './document'
+import { Validator } from 'models/validator'
+import { BaseDocument } from 'models/document'
 
 export class DocumentValidator extends Validator<BaseDocument> {
 

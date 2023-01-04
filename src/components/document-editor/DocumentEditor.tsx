@@ -12,18 +12,20 @@ import {
 
 import { BorderColor, EditOff, Add } from '@mui/icons-material'
 
-import useBlocks from '../../hooks/useBlocks'
-import { useForm } from '../../hooks/useForm'
-import { DocumentValidator } from '../../models/document/document.validator'
-import { BaseDocument } from '../../models/document/document'
+import { useBlocks } from 'hooks/useBlocks'
+import { useForm } from 'hooks/useForm'
 
-import EditableBlock, { RefBlock, setBlockFocus, getNextBlock, getPreviousBlock} from './EditableBlock'
+import { BaseDocument, DocumentValidator } from 'models/document'
 
-import './DocumentEditor.css'
+import { documentService } from 'services/document.service'
+
+import EditableBlock, { RefBlock, setBlockFocus, getNextBlock, getPreviousBlock} from 'components/document-editor/EditableBlock'
+
+import 'components/document-editor/document-editor.css'
 
 const validator = new DocumentValidator()
 
-const EditorDocument = () => {
+const DocumentEditor = () => {
     const initialState = { title: '', content: '' }
     const { blocks, content, addBlock, deleteBlock, updateBlock } = useBlocks()
     const [nameDisabled, setNameDisabled] = useState(false)
@@ -44,6 +46,15 @@ const EditorDocument = () => {
         validator, 
         onSubmit 
     })
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            const document = await documentService.fetchById('2')
+            console.log(document)
+        }
+
+        fetchUser()
+    }, [])
 
     useEffect(() => {
         validateField('content', content)
@@ -144,4 +155,4 @@ const EditorDocument = () => {
     )
 }
 
-export default EditorDocument
+export default DocumentEditor

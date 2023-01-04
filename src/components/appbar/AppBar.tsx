@@ -11,10 +11,11 @@ import {
 } from '@mui/material'
 import LoginIcon from '@mui/icons-material/Login'
 
-import AppMenu from './AppMenu'
-import Logo from './markdown.jpg'
-import './AppBar.css'
-import { InputSearcher } from '../title-searcher/TitleSearcher'
+import AppMenu from 'components/appbar/AppMenu'
+import Logo from 'static/img/markdown.jpg'
+import { InputSearcher } from 'components/title-searcher/TitleSearcher'
+
+import 'components/appbar/appbar.css'
 
 const AppBar = () => {
     const location = useLocation()

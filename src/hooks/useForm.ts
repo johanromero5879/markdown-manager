@@ -4,7 +4,7 @@ import {
     useState
 } from 'react'
 
-import { IValidator, ErrorValidation } from '../models/validator'
+import { IValidator, ErrorValidation } from 'models/validator'
 
 interface FormProps<FormState> {
     initialState: FormState,

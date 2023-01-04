@@ -7,7 +7,7 @@ import {
 import { IconButton } from '@mui/material'
 import { DragIndicator } from '@mui/icons-material'
 
-import { MarkdownRenderService as markdown } from '../../services/MarkdownRenderService'
+import { MarkdownRenderService as markdown } from '../../services/markdown-render.service'
 import { Block } from '../../hooks/useBlocks'
 
 

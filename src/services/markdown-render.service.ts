@@ -1,5 +1,5 @@
-import { Renderer } from './Renderer'
 import MarkdownIt from 'markdown-it'
+import { Renderer } from 'services/renderer'
 
 const md = new MarkdownIt({
     typographer: true

@@ -10,7 +10,6 @@ import {
     Typography
 } from '@mui/material'
 
-import './Document.css'
 
 const ViewerDocument = () => {
     const [document] = useState({

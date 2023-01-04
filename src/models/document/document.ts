@@ -1,4 +1,4 @@
-import { BaseUser } from '../user/user'
+import { BaseUser } from 'models/user'
 
 export interface BaseDocument {
     title: string,

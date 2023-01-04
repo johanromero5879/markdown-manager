@@ -1,4 +1,10 @@
 import { 
+    Link as LinkRouter,
+    useNavigate,
+    useLocation
+} from 'react-router-dom'
+
+import { 
     Dialog,
     DialogTitle,
     DialogContent,
@@ -8,49 +14,43 @@ import {
     Button,
     Link
 } from '@mui/material'
-import { 
-    useNavigate, 
-    Link as LinkRouter, 
-    useLocation 
-} from 'react-router-dom'
 
-import PasswordField from './PasswordField'
-import { useForm } from '../../hooks/useForm'
 
-import { Auth } from '../../models/user/user'
-import { UserValidator } from '../../models/user/user.validator'
+import PasswordField from 'components/password-field/PasswordField'
+import { useForm } from 'hooks/useForm'
+import { NewUser, UserValidator } from 'models/user'
 
-import './Forms.css'
+const validator = new UserValidator<NewUser>()
 
-const validator = new UserValidator<Auth>()
-
-const LoginForm = () => {
+const Signup = () => {
     // Location url
     const location = useLocation()
     const state = location.state as { background?: Location }
-    const navigate = useNavigate()
 
-    const initialState: Auth = {
+    const navigate = useNavigate()
+    
+    const initialState: NewUser = {
         username: '',
+        fullname: '',
         password: '',
+        confirmPassword: ''
     }
 
     const onSubmit = async () => {
-        console.log('Submited by LoginForm')
+        console.log('Submited by SignupForm')
     }
 
-    const { 
-        state: credentials,
-        errors, 
-        handleChange,
-        handleSubmit 
-    } = useForm<Auth>({
+    const {
+        state: user,
+        errors,
+        handleChange, 
+        handleSubmit
+    } = useForm<NewUser>({
         initialState,
         validator,
         onSubmit
     })
 
-    
     const handleClose = () => {
         navigate('/')
     }
@@ -61,36 +61,54 @@ const LoginForm = () => {
             onClose={handleClose}
             className="dialog"
         >
-            <DialogTitle>Login</DialogTitle>
+            <DialogTitle>Sign Up</DialogTitle>
             <DialogContent>
-                <form id="login-form" onSubmit={handleSubmit}>
+                <form id="signup-form" onSubmit={handleSubmit}>
+                    <TextField 
+                        id="fullname"
+                        name="fullname"
+                        label="Full name" 
+                        variant="outlined" 
+                        value={user.fullname}
+                        onChange={handleChange}
+                        error={!!errors.fullname}
+                        helperText={errors.fullname}
+                    />
                     <TextField 
                         id="username"
                         name="username"
                         label="Username" 
                         variant="outlined" 
-                        value={credentials.username}
+                        value={user.username}
                         onChange={handleChange}
                         error={!!errors.username}
                         helperText={errors.username}
                     />
                     <PasswordField 
-                        value={credentials.password}
+                        value={user.password}
                         label='Password'
                         name='password'
                         onChange={handleChange}
                         error={!!errors.password}
                         helperText={errors.password}
                     />
+                    <PasswordField 
+                        value={user.confirmPassword}
+                        label='Confirm password'
+                        name='confirmPassword'
+                        onChange={handleChange}
+                        error={!!errors.confirmPassword}
+                        helperText={errors.confirmPassword}
+                    />
                     <DialogContentText>
-                        New over here?&nbsp;
+                        Do you already have an account?&nbsp;
                         <Link 
                             className="nowrap"
                             component={LinkRouter} 
-                            to="/signup" 
+                            to="/login"
                             state={{ background: state?.background }}
                         >
-                            Sign up
+                            Log in
                         </Link>
                     </DialogContentText>
                 </form>
@@ -99,7 +117,7 @@ const LoginForm = () => {
                 <Button
                     variant="contained"
                     type="submit"
-                    form='login-form'
+                    form="signup-form"
                 >
                     Submit
                 </Button>
@@ -108,4 +126,4 @@ const LoginForm = () => {
     )
 }
 
-export default LoginForm
+export default Signup

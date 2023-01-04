@@ -30,7 +30,7 @@ const ListDocumentItem = ({ document, dense }: ListTitlesProps) => {
             >
                 <ListItemButton 
                     component={Link}
-                    to={`/document/view/${document._id}`}
+                    to={`/document/${document._id}`}
                 >
                     <ListItemIcon sx={{minWidth: '35px'}}>
                         <DocumentIcon />
@@ -52,7 +52,7 @@ const ListDocumentItem = ({ document, dense }: ListTitlesProps) => {
         >
             <ListItemButton
                 component={Link}
-                to={`/document/new`}
+                to="/document"
             >
                 <ListItemIcon sx={{minWidth: '35px'}}>
                     <AddIcon />

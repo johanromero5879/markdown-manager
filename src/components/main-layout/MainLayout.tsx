@@ -1,9 +1,10 @@
 import {  Outlet } from 'react-router-dom'
 import { useMediaQuery } from '@mui/material'
-import AppBar from '../appbar/AppBar';
-import { SideSearcher } from '../title-searcher/TitleSearcher'
+import AppBar from 'components/appbar/AppBar';
+import { SideSearcher } from 'components/title-searcher/TitleSearcher'
 
-const Layout = () => {
+const MainLayout = () => {
+
     const matchDesktop = useMediaQuery('(min-width: 1024px)')
 
     return <>
@@ -15,6 +16,7 @@ const Layout = () => {
             </div>
         </main>
     </>
+    
 }
 
-export default Layout
+export default MainLayout

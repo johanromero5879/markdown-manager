@@ -8,7 +8,7 @@ export interface Block {
 
 const uid = () => Date.now().toString(36) + Math.random().toString(36).substring(2)
 
-const useBlocks = () => {
+export const useBlocks = () => {
     const [blocks, setBlocks] = useState<Block[]>([{id: uid(), text: ''}])
     const [content, setContent] = useState('')
 
@@ -47,5 +47,3 @@ const useBlocks = () => {
 
     return { blocks, content, addBlock, deleteBlock, updateBlock }
 }
-
-export default useBlocks

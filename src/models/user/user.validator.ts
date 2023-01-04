@@ -1,5 +1,5 @@
-import { Validator, ErrorValidation } from '../validator'
-import { NewUser, Auth } from './user'
+import { Validator, ErrorValidation } from 'models/validator'
+import { NewUser, Auth } from 'models/user'
 
 // eslint-disable-next-line
 type UserUnion = NewUser | Auth 

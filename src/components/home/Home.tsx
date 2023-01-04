@@ -1,4 +1,4 @@
-import './Home.css'
+import 'components/home/home.css'
 
 const Home = () => {
     return <h1>Homepage</h1>

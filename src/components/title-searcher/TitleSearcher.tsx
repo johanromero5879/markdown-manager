@@ -12,8 +12,9 @@ import {
 import SearchIcon from '@mui/icons-material/Search'
 import AddIcon from '@mui/icons-material/NoteAdd'
 
-import './TitleSearcher.css'
-import ListDocumentItem from './ListDocumentItem'
+import ListDocumentItem from 'components/title-searcher/ListDocumentItem'
+
+import 'components/title-searcher/title-searcher.css'
 
 const documents = [
     {
